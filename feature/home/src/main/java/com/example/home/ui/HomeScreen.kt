@@ -1,5 +1,6 @@
 package com.example.home.ui
 
+import android.Manifest
 import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
@@ -18,6 +19,7 @@ import com.example.home.R
 import com.example.home.components.camera.CameraCapture
 import com.example.home.components.gallery.GallerySelect
 import com.example.home.constants.EMPTY_IMAGE_URI
+import com.example.home.utils.RequestPermission
 
 @Composable
 fun HomeScreen(
@@ -43,12 +45,17 @@ fun HomeScreen(
 
     var showCameraCapture by remember { mutableStateOf(false) }
     if (showCameraCapture) {
-        CameraCapture(
-            onImageUri = { uri ->
-                showCameraCapture = false
-                imageUri = uri
-            }
-        )
+        RequestPermission(
+            permission = Manifest.permission.CAMERA,
+            onClose = { showCameraCapture = false }
+        ) {
+            CameraCapture(
+                onImageUri = { uri ->
+                    showCameraCapture = false
+                    imageUri = uri
+                }
+            )
+        }
     }
 
     DefaultScreenUI {
