@@ -1,0 +1,16 @@
+apply from: "$rootDir/android-library-build.gradle"
+
+buildscript {
+    ext {
+        camerax_stable_version = "1.0.2"
+    }
+}
+
+dependencies {
+    implementation project(path: ':components')
+    implementation "androidx.camera:camera-core:${camerax_stable_version}"
+    implementation "androidx.camera:camera-camera2:${camerax_stable_version}"
+    implementation "androidx.camera:camera-lifecycle:${camerax_stable_version}"
+    implementation "androidx.camera:camera-view:1.0.0-alpha30"
+    implementation "com.google.accompanist:accompanist-permissions:0.21.1-beta"
+}

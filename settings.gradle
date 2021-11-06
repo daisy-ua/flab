@@ -8,4 +8,10 @@ dependencyResolutionManagement {
 }
 rootProject.name = "flab"
 include ':app'
+
 include ':opencv'
+
+include ':components'
+
+include ':feature:home'
+include ':feature:main'

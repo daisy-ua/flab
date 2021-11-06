@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="project_name">flab</string>
+    <string name="datetime_format_pattern">yyyy-MM-dd HH:mm:ss.SSS</string>
+</resources>

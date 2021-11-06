@@ -1,4 +1,4 @@
-package com.example.flab
+package com.example.main
 
 import org.junit.Assert.assertEquals
 import org.junit.Test
