@@ -15,3 +15,5 @@ include ':components'
 
 include ':feature:home'
 include ':feature:main'
+
+include ':library'
