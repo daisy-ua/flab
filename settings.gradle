@@ -17,3 +17,4 @@ include ':feature:home'
 include ':feature:main'
 
 include ':library'
+include ':constants'

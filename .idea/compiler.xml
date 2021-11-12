@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="CompilerConfiguration">
-    <bytecodeTargetLevel target="11" />
+    <bytecodeTargetLevel target="1.7">
+      <module name="flab.app" target="11" />
+      <module name="flab.components" target="11" />
+      <module name="flab.feature.home" target="11" />
+      <module name="flab.feature.main" target="11" />
+      <module name="flab.library" target="11" />
+      <module name="flab.opencv" target="11" />
+    </bytecodeTargetLevel>
   </component>
 </project>
