@@ -16,5 +16,5 @@ open class ImageProcessing(
         result = Bitmap.createBitmap(src.cols(), src.rows(), Bitmap.Config.ARGB_8888)
     }
 
-    fun saveResult() = Utils.matToBitmap(src, result)
+    fun saveResult(source: Mat = src) = Utils.matToBitmap(source, result)
 }
