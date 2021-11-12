@@ -1,16 +1,14 @@
 package flab.editor.library.adjust
 
 import android.graphics.Bitmap
-import org.opencv.android.Utils
-import org.opencv.core.Mat
+import flab.editor.library.ImageProcessing
 
-class Tune(bitmap: Bitmap) {
-    private val src = Mat()
-    private val result: Bitmap
+class Tune(
+    bitmap: Bitmap
+) : ImageProcessing(bitmap) {
 
     init {
-        Utils.bitmapToMat(bitmap, src)
-        result = Bitmap.createBitmap(src.cols(), src.rows(), Bitmap.Config.ARGB_8888)
+        createResultBitmap()
     }
 
     /**
@@ -31,8 +29,7 @@ class Tune(bitmap: Bitmap) {
         alpha: Double = 1.0, beta: Double = 0.0
     ) : Bitmap {
         src.convertTo(src, -1, alpha, beta)
-
-        Utils.matToBitmap(src, result)
+        saveResult()
         return result
     }
 }
