@@ -16,8 +16,14 @@ sealed class Screen(
 
     object Main : Screen(
         route = ScreenConstants.MAIN_ROUTE,
-        arguments = listOf(navArgument(ScreenConstants.MAIN_IMAGE_ARGUMENT) {
-            type = NavType.StringType
-        })
+//        arguments = listOf(navArgument(ScreenConstants.MAIN_IMAGE_ARGUMENT) {
+//            type = NavType.StringType
+//        })
+        arguments = emptyList()
+    )
+
+    object TuneEdit : Screen(
+        route = ScreenConstants.EDIT_TUNE,
+        arguments = emptyList()
     )
 }

@@ -8,16 +8,25 @@ import androidx.activity.compose.setContent
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navigation
 import com.example.flab.constants.ScreenConstants
 import com.example.flab.ui.navigation.Screen
+import com.example.flab.ui.navigation.editGraph
+import com.example.flab.ui.navigation.homeGraph
 import com.example.flab.ui.theme.FlabTheme
 import com.example.home.ui.HomeScreen
+import com.example.imagesource.SourceViewModel
 import com.example.main.ui.MainScreen
+import com.example.main.ui.options.TuneScreen
 import org.opencv.android.OpenCVLoader
+
+private lateinit var vm: SourceViewModel
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,6 +42,7 @@ fun FlabApp() {
     FlabTheme {
         initOpenCV()
         val navController = rememberNavController()
+        vm = viewModel()
 
         NavigationComponent(navController)
     }
@@ -51,31 +61,13 @@ fun NavigationComponent(
 ) {
     NavHost(
         navController = navController,
-        startDestination = Screen.Home.route,
+        startDestination = ScreenConstants.HOME_GRAPH_ROUTE,
         modifier = modifier
     ) {
-        composable(Screen.Home.route) {
-            HomeScreen(
-                R.drawable.ic_logo_stroke,
-                navigateToMainScreen = { imageUri ->
-                    navigateToMainScreen(navController, imageUri)
-                }
-            )
-        }
-        composable(
-            Screen.Main.route +
-                    "/{${ScreenConstants.MAIN_IMAGE_ARGUMENT}}"
-        ) { backStackEntry ->
-            val uri = backStackEntry.arguments?.getString(ScreenConstants.MAIN_IMAGE_ARGUMENT)
-            MainScreen(imageUri = Uri.parse(uri))
-        }
+        homeGraph(navController, vm)
+        editGraph(navController, vm)
     }
 }
-
-private fun navigateToMainScreen(navController: NavHostController, imageUri: String) =
-    navController.navigate("${Screen.Main.route}/$imageUri") {
-//        popUpTo(Screen.Home.route) { inclusive = true }
-    }
 
 @Preview(showBackground = true)
 @Composable
