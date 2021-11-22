@@ -1,5 +1,7 @@
 package com.example.main
 
+import com.example.main.constants.BrightnessConstants
+import com.example.main.ui.options.convertPercentageToValue
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
@@ -11,6 +13,6 @@ import org.junit.Test
 class ExampleUnitTest {
     @Test
     fun addition_isCorrect() {
-        assertEquals(4, 2 + 2)
+        assertEquals(-100, convertPercentageToValue(-100f, BrightnessConstants))
     }
 }

@@ -1,6 +1,7 @@
-package com.example.main.components.options
+package com.example.main.models
 
 import com.example.main.R
+import com.example.main.components.options.IPhotoOption
 
 sealed class FirstLevelOptions : IPhotoOption {
     object TuneOption : FirstLevelOptions() {

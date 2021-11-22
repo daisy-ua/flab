@@ -1,6 +1,5 @@
 package com.example.flab
 
-import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
@@ -9,21 +8,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navigation
 import com.example.flab.constants.ScreenConstants
-import com.example.flab.ui.navigation.Screen
 import com.example.flab.ui.navigation.editGraph
 import com.example.flab.ui.navigation.homeGraph
 import com.example.flab.ui.theme.FlabTheme
 import com.example.home.ui.HomeScreen
 import com.example.imagesource.SourceViewModel
-import com.example.main.ui.MainScreen
-import com.example.main.ui.options.TuneScreen
 import org.opencv.android.OpenCVLoader
 
 private lateinit var vm: SourceViewModel

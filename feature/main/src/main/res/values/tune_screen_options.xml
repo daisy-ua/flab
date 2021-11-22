@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="contrast_option">Contrast</string>
+    <string name="brightness_option">Brightness</string>
+</resources>
