@@ -1,28 +1,31 @@
 package com.example.main.ui.options
 
 import android.util.Log
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.*
-import com.example.main.components.DefaultOptionScreen
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.imagesource.SourceViewModel
 import com.example.main.components.AmountSlider
+import com.example.main.components.DefaultOptionScreen
 import com.example.main.components.OptionsBottomBar
 import com.example.main.constants.BrightnessConstants
 import com.example.main.constants.ContrastConstants
 import com.example.main.models.TuneScreenOptions
 import flab.editor.library.adjust.Tune
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
+
+private const val FILTER_COROUTINE = "FilterCoroutine"
 
 @Composable
 fun TuneScreen(
     modifier: Modifier = Modifier,
     sourceViewModel: SourceViewModel = viewModel(),
-    save: () -> Unit
+    save: () -> Unit,
 ) {
     val tune = Tune(sourceViewModel.currentSource!!)
     var bitmap by remember { mutableStateOf(sourceViewModel.currentSource) }
@@ -31,7 +34,12 @@ fun TuneScreen(
     var brightnessValue by remember { mutableStateOf(0f) }
 
     var sliderValue by remember { mutableStateOf<Float?>(null) }
-    var onValueChange by remember { mutableStateOf({  }) }
+    var onValueChange by remember { mutableStateOf({ }) }
+
+    val scope = rememberCoroutineScope()
+    var job: Job? by remember {
+        mutableStateOf(null)
+    }
 
     DefaultOptionScreen(
         modifier = modifier.fillMaxWidth(),
@@ -42,10 +50,17 @@ fun TuneScreen(
                 AmountSlider(
                     sliderValue = value,
                     onValueChange = { sliderValue = it },
-                    onValueChangeFinished = onValueChange
+                    onValueChangeFinished = {
+                        job?.cancel()
+                        job = scope.launch(Dispatchers.Default) {
+                            try {
+                                onValueChange()
+                            } catch (ex: Exception) {
+                                Log.i(FILTER_COROUTINE, "Applying filter cancelled")
+                            }
+                        }
+                    }
                 )
-
-                Log.i("rita", "$contrastValue     ${convertPercentageToValue(brightnessValue, BrightnessConstants)}")
             }
 
             OptionsBottomBar(
