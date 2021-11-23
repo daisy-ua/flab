@@ -2,4 +2,6 @@
 <resources>
     <string name="contrast_option">Contrast</string>
     <string name="brightness_option">Brightness</string>
+    <string name="blur_option">Blur</string>
+    <string name="sharpness_option">Sharpness</string>
 </resources>

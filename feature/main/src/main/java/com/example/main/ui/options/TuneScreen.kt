@@ -13,7 +13,9 @@ import com.example.main.components.DefaultOptionScreen
 import com.example.main.components.OptionsBottomBar
 import com.example.main.constants.BrightnessConstants
 import com.example.main.constants.ContrastConstants
+import com.example.main.constants.GaussianKernelConstants
 import com.example.main.models.TuneScreenOptions
+import flab.editor.library.adjust.Sharpness
 import flab.editor.library.adjust.Tune
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -27,11 +29,14 @@ fun TuneScreen(
     sourceViewModel: SourceViewModel = viewModel(),
     save: () -> Unit,
 ) {
-    val tune = Tune(sourceViewModel.currentSource!!)
+//    TODO: move logic to viewmodel
     var bitmap by remember { mutableStateOf(sourceViewModel.currentSource) }
+    val tune = Tune(bitmap!!)
+    val sharpness = Sharpness(bitmap!!)
 
     var contrastValue by remember { mutableStateOf(0f) }
     var brightnessValue by remember { mutableStateOf(0f) }
+    var sharpeningValue by remember { mutableStateOf(0f) }
 
     var sliderValue by remember { mutableStateOf<Float?>(null) }
     var onValueChange by remember { mutableStateOf({ }) }
@@ -83,6 +88,18 @@ fun TuneScreen(
                                 convertPercentageToValue(sliderValue!!, BrightnessConstants),
                             )
                             brightnessValue = sliderValue!!
+                        }
+                    }),
+                    Pair(TuneScreenOptions.Sharpening, {
+                        sliderValue = sharpeningValue
+                        onValueChange = {
+                            var kernelSize = convertPercentageToValue(sliderValue!!, GaussianKernelConstants)
+                            if (kernelSize.toInt() % 2 == 0)
+                                kernelSize += 1.0
+                            bitmap = if (kernelSize > 0)
+                                sharpness.sharpen(kernelSize)
+                            else sharpness.blur(-kernelSize)
+                            sharpeningValue = sliderValue!!
                         }
                     })
                 )

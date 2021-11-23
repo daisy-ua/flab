@@ -16,4 +16,16 @@ sealed class TuneScreenOptions : IPhotoOption {
         override val drawableId: Int
             get() = R.drawable.ic_brightness_24
     }
+    object Blur : TuneScreenOptions() {
+        override val nameId: Int
+            get() = R.string.brightness_option
+        override val drawableId: Int
+            get() = R.drawable.ic_brightness_24
+    }
+    object Sharpening : TuneScreenOptions() {
+        override val nameId: Int
+            get() = R.string.sharpness_option
+        override val drawableId: Int
+            get() = R.drawable.ic_details_24
+    }
 }
