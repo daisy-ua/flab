@@ -17,7 +17,8 @@ import com.example.main.models.FirstLevelOptions
 @Composable
 fun MainScreen(
     sourceViewModel: SourceViewModel = viewModel(),
-    navigateToTuneScreen: () -> Unit
+    navigateToTuneScreen: () -> Unit,
+    navigateToRotateScreen: () -> Unit
 ) {
 
     DefaultScreenUI {
@@ -45,7 +46,8 @@ fun MainScreen(
             OptionsBottomBar(
                 modifier = Modifier.align(Alignment.BottomStart),
                 photoOptions = listOf(
-                    Pair(FirstLevelOptions.TuneOption, navigateToTuneScreen)
+                    Pair(FirstLevelOptions.TuneOption, navigateToTuneScreen),
+                    Pair(FirstLevelOptions.FlipRotateOption, navigateToRotateScreen)
                 )
             )
         }

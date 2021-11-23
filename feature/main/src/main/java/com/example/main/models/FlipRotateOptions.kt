@@ -3,17 +3,17 @@ package com.example.main.models
 import com.example.main.R
 import com.example.main.components.options.IPhotoOption
 
-sealed class FirstLevelOptions : IPhotoOption {
-    object TuneOption : FirstLevelOptions() {
+sealed class FlipRotateOptions : IPhotoOption {
+    object FlipOption : FlipRotateOptions() {
         override val nameId: Int
-            get() = R.string.tune_option
+            get() = R.string.flip_option
         override val drawableId: Int
-            get() = R.drawable.ic_tune_24
+            get() = R.drawable.ic_flip_24
     }
 
-    object FlipRotateOption : FirstLevelOptions() {
+    object RotateOption : FlipRotateOptions() {
         override val nameId: Int
-            get() = R.string.flip_rotate_option
+            get() = R.string.rotate_option
         override val drawableId: Int
             get() = R.drawable.ic_rotate_right_24
     }

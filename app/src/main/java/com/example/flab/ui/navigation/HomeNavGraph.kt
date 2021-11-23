@@ -47,7 +47,8 @@ fun NavGraphBuilder.homeGraph(navController: NavHostController, vm: SourceViewMo
 private fun CreateMainScreen(navController: NavHostController, vm: SourceViewModel) =
     MainScreen(
         vm,
-        navigateToTuneScreen = { navController.navigate(Screen.TuneEdit.route) }
+        navigateToTuneScreen = { navController.navigate(Screen.TuneEdit.route) },
+        navigateToRotateScreen = { navController.navigate(Screen.FlipRotateEdit.route) }
     )
 
 private fun navigateToMainScreen(navController: NavHostController, imageUri: String) =

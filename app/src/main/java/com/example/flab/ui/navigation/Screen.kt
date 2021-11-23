@@ -26,4 +26,9 @@ sealed class Screen(
         route = ScreenConstants.EDIT_TUNE,
         arguments = emptyList()
     )
+
+    object FlipRotateEdit : Screen(
+        route = ScreenConstants.EDIT_TUNE,
+        arguments = emptyList()
+    )
 }
