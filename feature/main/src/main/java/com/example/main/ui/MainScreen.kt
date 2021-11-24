@@ -18,6 +18,7 @@ import com.example.main.models.FirstLevelOptions
 fun MainScreen(
     sourceViewModel: SourceViewModel = viewModel(),
     navigateToTuneScreen: () -> Unit,
+    navigateToClarityScreen: () -> Unit,
     navigateToRotateScreen: () -> Unit
 ) {
 
@@ -47,6 +48,7 @@ fun MainScreen(
                 modifier = Modifier.align(Alignment.BottomStart).fillMaxWidth(),
                 photoOptions = listOf(
                     Pair(FirstLevelOptions.TuneOption, navigateToTuneScreen),
+                    Pair(FirstLevelOptions.Clarity, navigateToClarityScreen),
                     Pair(FirstLevelOptions.FlipRotateOption, navigateToRotateScreen)
                 )
             )

@@ -10,5 +10,6 @@ object ScreenConstants {
     const val MAIN_IMAGE_ARGUMENT = "image_uri"
 
     const val EDIT_TUNE = "edit_tune"
-    const val ROTATE_EDIT = "rotate_edit"
+    const val EDIT_CLARITY = "edit_clarity"
+    const val EDIT_ROTATE = "rotate_edit"
 }

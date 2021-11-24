@@ -17,13 +17,18 @@ sealed class Screen(
         arguments = emptyList()
     )
 
+    object ClarityEdit : Screen(
+        route = ScreenConstants.EDIT_CLARITY,
+        arguments = emptyList()
+    )
+
     object TuneEdit : Screen(
         route = ScreenConstants.EDIT_TUNE,
         arguments = emptyList()
     )
 
     object FlipRotateEdit : Screen(
-        route = ScreenConstants.ROTATE_EDIT,
+        route = ScreenConstants.EDIT_ROTATE,
         arguments = emptyList()
     )
 }

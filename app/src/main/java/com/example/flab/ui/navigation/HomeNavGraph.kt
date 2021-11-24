@@ -48,6 +48,7 @@ private fun CreateMainScreen(navController: NavHostController, vm: SourceViewMod
     MainScreen(
         vm,
         navigateToTuneScreen = { navController.navigate(Screen.TuneEdit.route) },
+        navigateToClarityScreen = { navController.navigate(Screen.ClarityEdit.route) },
         navigateToRotateScreen = { navController.navigate(Screen.FlipRotateEdit.route) }
     )
 

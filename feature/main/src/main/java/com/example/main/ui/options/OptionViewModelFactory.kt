@@ -4,6 +4,7 @@ import android.graphics.Bitmap
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.main.ui.options.rotate.FlipRotateViewModel
+import com.example.main.ui.options.sharpness.SharpnessViewModel
 import com.example.main.ui.options.tune.TuneViewModel
 
 //TODO: optimize for all
@@ -18,5 +19,12 @@ class TuneViewModelFactory(private val bitmap: Bitmap): ViewModelProvider.Factor
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         return TuneViewModel(bitmap) as T
+    }
+}
+
+class SharpnessViewModelFactory(private val bitmap: Bitmap): ViewModelProvider.Factory {
+    @Suppress("UNCHECKED_CAST")
+    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+        return SharpnessViewModel(bitmap) as T
     }
 }

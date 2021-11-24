@@ -18,6 +18,7 @@ import com.example.main.constants.SliderRange
 @Composable
 fun AmountSlider(
     modifier: Modifier = Modifier,
+    sliderName: Int = R.string.amount,
     sliderValue: Float,
     valueRange:  ClosedFloatingPointRange<Float> = SliderRange.MIN_SLIDER..SliderRange.MAX_SLIDER,
     onValueChange: (Float) -> Unit = { },
@@ -27,7 +28,7 @@ fun AmountSlider(
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Text(text = stringResource(id = R.string.amount))
+        Text(text = stringResource(id = sliderName))
 
         Slider(
             value = sliderValue,
