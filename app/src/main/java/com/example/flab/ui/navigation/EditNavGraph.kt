@@ -7,7 +7,7 @@ import androidx.navigation.navigation
 import com.example.flab.constants.ScreenConstants
 import com.example.imagesource.SourceViewModel
 import com.example.main.ui.options.rotate.FlipRotateScreen
-import com.example.main.ui.options.TuneScreen
+import com.example.main.ui.options.tune.TuneScreen
 
 fun NavGraphBuilder.editGraph(navController: NavHostController, vm: SourceViewModel) {
     navigation(

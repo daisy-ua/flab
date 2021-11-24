@@ -44,7 +44,7 @@ fun MainScreen(
             }
 
             OptionsBottomBar(
-                modifier = Modifier.align(Alignment.BottomStart),
+                modifier = Modifier.align(Alignment.BottomStart).fillMaxWidth(),
                 photoOptions = listOf(
                     Pair(FirstLevelOptions.TuneOption, navigateToTuneScreen),
                     Pair(FirstLevelOptions.FlipRotateOption, navigateToRotateScreen)

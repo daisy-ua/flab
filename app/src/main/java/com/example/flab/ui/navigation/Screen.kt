@@ -1,13 +1,11 @@
 package com.example.flab.ui.navigation
 
 import androidx.navigation.NamedNavArgument
-import androidx.navigation.NavType
-import androidx.navigation.navArgument
 import com.example.flab.constants.ScreenConstants
 
 sealed class Screen(
     val route: String,
-    val arguments: List<NamedNavArgument>
+    val arguments: List<NamedNavArgument>,
 ) {
     object Home : Screen(
         route = ScreenConstants.HOME_ROUTE,
@@ -16,9 +14,6 @@ sealed class Screen(
 
     object Main : Screen(
         route = ScreenConstants.MAIN_ROUTE,
-//        arguments = listOf(navArgument(ScreenConstants.MAIN_IMAGE_ARGUMENT) {
-//            type = NavType.StringType
-//        })
         arguments = emptyList()
     )
 
@@ -28,7 +23,7 @@ sealed class Screen(
     )
 
     object FlipRotateEdit : Screen(
-        route = ScreenConstants.EDIT_TUNE,
+        route = ScreenConstants.ROTATE_EDIT,
         arguments = emptyList()
     )
 }

@@ -1,21 +1,22 @@
 package com.example.main.components
 
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.components.DefaultScreenUI
+import com.example.main.R
 
 @Composable
 fun DefaultOptionScreen(
     modifier: Modifier = Modifier,
     bitmapImage: ImageBitmap?,
-    bottomSheet: @Composable () -> Unit = { }
+    onSave: () -> Unit = { },
+    bottomSheet: @Composable () -> Unit = { },
 ) {
     DefaultScreenUI {
         BoxWithConstraints(
@@ -33,7 +34,11 @@ fun DefaultOptionScreen(
                         .height(45.dp)
                         .padding(start = 20.dp, end = 20.dp)
                 ) {
-                    Text(text = "option-name")
+                    NavBarTextBtn(
+                        text = stringResource(id = R.string.save_image),
+                        modifier = Modifier.align(Alignment.CenterEnd),
+                        onCLick = onSave
+                    )
                 }
 
                 bitmapImage?.let {
@@ -47,7 +52,9 @@ fun DefaultOptionScreen(
                 }
             }
 
-            Box(modifier = modifier.fillMaxWidth().align(Alignment.BottomEnd)) {
+            Box(modifier = modifier
+                .fillMaxWidth()
+                .align(Alignment.BottomCenter)) {
                 bottomSheet()
             }
 

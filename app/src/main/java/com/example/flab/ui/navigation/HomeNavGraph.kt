@@ -53,6 +53,6 @@ private fun CreateMainScreen(navController: NavHostController, vm: SourceViewMod
 
 private fun navigateToMainScreen(navController: NavHostController, imageUri: String) =
     navController.navigate("${Screen.Main.route}/$imageUri") {
-//        popUpTo(Screen.Home.route) { inclusive = true }
+        popUpTo(Screen.Home.route) { inclusive = true }
         launchSingleTop = true
     }

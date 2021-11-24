@@ -1,19 +1,20 @@
 package com.example.main.components
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.Card
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.sp
 
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun OptionCard(
     modifier: Modifier = Modifier,
@@ -23,17 +24,16 @@ fun OptionCard(
 ) {
     val title = stringResource(titleId)
 
-    Card(
-        onClick = onClick,
-        modifier = modifier
+    Box(
+        modifier = modifier.clickable { onClick() }
     ) {
         Column(
             modifier = modifier.fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
         ) {
-            Text(text = title)
-            
             Image(painter = painterResource(id = drawableId), contentDescription = title)
+            Text(text = title, fontSize = 12.sp)
         }
     }
 }
