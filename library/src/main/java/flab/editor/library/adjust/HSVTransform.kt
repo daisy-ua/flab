@@ -7,6 +7,7 @@ import org.opencv.core.Mat
 import org.opencv.core.Scalar
 import org.opencv.imgproc.Imgproc
 
+
 class HSVTransform(
     bitmap: Bitmap,
 ) : ImageProcessing(bitmap) {
@@ -19,8 +20,7 @@ class HSVTransform(
     private lateinit var s: Mat
     private lateinit var v: Mat
 
-//Some colour in HSV, [Hue (0-360), Saturation (0-1), Value (0-1)]
-//Some colour in HSV, [Hue (0-360), Saturation (0-1), Value (0-1)]
+//Hue range is [0,179], Saturation range is [0,255] and Value range is [0,255]
 
     init {
         parseBGRAChannels()
@@ -28,15 +28,47 @@ class HSVTransform(
         createResultBitmap()
     }
 
-    fun setSaturation(): Bitmap {
+    fun setHue(value: Double): Bitmap {
+        val newH = Mat()
+        Core.add(h, Scalar(value), newH)
+        Core.normalize(newH, newH, 0.0, 179.0, Core.NORM_MINMAX)
+        return saveRGB(newH = newH)
+    }
+
+    fun setSaturation(value: Double): Bitmap {
+        val newS = Mat()
+        Core.add(s, Scalar(value), newS)
+        Core.normalize(newS, newS, 0.0, 255.0, Core.NORM_MINMAX)
+        return saveRGB(newS = newS)
+    }
+
+    fun setBrightness(value: Double): Bitmap {
+        val newV = Mat()
+        Core.add(v, Scalar(value), newV)
+        Core.normalize(newV, newV, 0.0, 255.0, Core.NORM_MINMAX)
+        return saveRGB(newV = newV)
+    }
+
+    private fun saveRGB(newH: Mat = h, newS: Mat = s, newV: Mat = v): Bitmap {
+        val bgrNew = convertHVS2GBR(newH, newS, newV)
+        val dst = convertBGR2RGB(bgrNew)
+        saveResult(dst)
+        return result
+    }
+
+    private fun convertHVS2GBR(newH: Mat, newS: Mat, newV: Mat): Mat {
+        val hsvNew = Mat()
         Core.merge(listOf(
-            h, s, v
-        ), hsvImage)
+            newH, newS, newV
+        ), hsvNew)
 
         val brgNew = Mat()
-        Imgproc.cvtColor(hsvImage, brgNew, Imgproc.COLOR_HSV2BGR)
+        Imgproc.cvtColor(hsvNew, brgNew, Imgproc.COLOR_HSV2BGR)
+        return brgNew
+    }
 
-        Core.split(brgNew, bgraChannels)
+    private fun convertBGR2RGB(bgrNew: Mat): Mat {
+        Core.split(bgrNew, bgraChannels)
         val argb = Mat()
         Core.merge(listOf(
             bgraChannels[2],
@@ -45,10 +77,9 @@ class HSVTransform(
             a
         ), argb)
 
-        Imgproc.cvtColor(argb, src, Imgproc.COLOR_BGR2BGRA)
-
-        saveResult()
-        return result
+        val dst = Mat()
+        Imgproc.cvtColor(argb, dst, Imgproc.COLOR_BGR2BGRA)
+        return dst
     }
 
     private fun parseBGRAChannels() {

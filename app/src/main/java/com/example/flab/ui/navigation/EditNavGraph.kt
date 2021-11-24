@@ -7,7 +7,7 @@ import androidx.navigation.navigation
 import com.example.flab.constants.ScreenConstants
 import com.example.imagesource.SourceViewModel
 import com.example.main.ui.options.rotate.FlipRotateScreen
-import com.example.main.ui.options.sharpness.Sharpness
+import com.example.main.ui.options.sharpness.SharpnessScreen
 import com.example.main.ui.options.tune.TuneScreen
 
 fun NavGraphBuilder.editGraph(navController: NavHostController, vm: SourceViewModel) {
@@ -40,7 +40,7 @@ fun NavGraphBuilder.editGraph(navController: NavHostController, vm: SourceViewMo
         }
 
         composable(Screen.ClarityEdit.route) {
-            Sharpness(
+            SharpnessScreen(
                 sourceViewModel = vm,
                 save = {
                     navController.navigate(Screen.Main.route) {

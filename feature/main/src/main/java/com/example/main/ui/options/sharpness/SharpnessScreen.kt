@@ -16,7 +16,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
 @Composable
-fun Sharpness(
+fun SharpnessScreen(
     modifier: Modifier = Modifier,
     sourceViewModel: SourceViewModel = viewModel(),
     save: () -> Unit,
