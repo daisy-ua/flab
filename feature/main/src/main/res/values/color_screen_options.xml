@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="hue_option">Hue</string>
+    <string name="saturation_option">Saturation</string>
+    <string name="value_option">Brightness</string>
+</resources>

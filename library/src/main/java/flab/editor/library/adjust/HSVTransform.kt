@@ -28,25 +28,32 @@ class HSVTransform(
         createResultBitmap()
     }
 
-    fun setHue(value: Double): Bitmap {
+    fun setHSVTransform(hue: Double, saturation: Double, value: Double): Bitmap {
+        val newH = setHue(hue)
+        val newS = setSaturation(saturation)
+        val newV = setBrightness(value)
+        return saveRGB(newH, newS, newV)
+    }
+
+    private fun setHue(value: Double): Mat {
         val newH = Mat()
         Core.add(h, Scalar(value), newH)
         Core.normalize(newH, newH, 0.0, 179.0, Core.NORM_MINMAX)
-        return saveRGB(newH = newH)
+        return newH
     }
 
-    fun setSaturation(value: Double): Bitmap {
+    private fun setSaturation(value: Double): Mat {
         val newS = Mat()
         Core.add(s, Scalar(value), newS)
         Core.normalize(newS, newS, 0.0, 255.0, Core.NORM_MINMAX)
-        return saveRGB(newS = newS)
+        return newS
     }
 
-    fun setBrightness(value: Double): Bitmap {
+    private fun setBrightness(value: Double): Mat {
         val newV = Mat()
         Core.add(v, Scalar(value), newV)
         Core.normalize(newV, newV, 0.0, 255.0, Core.NORM_MINMAX)
-        return saveRGB(newV = newV)
+        return newV
     }
 
     private fun saveRGB(newH: Mat = h, newS: Mat = s, newV: Mat = v): Bitmap {

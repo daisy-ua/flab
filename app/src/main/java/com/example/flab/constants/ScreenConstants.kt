@@ -12,4 +12,5 @@ object ScreenConstants {
     const val EDIT_TUNE = "edit_tune"
     const val EDIT_CLARITY = "edit_clarity"
     const val EDIT_ROTATE = "rotate_edit"
+    const val EDIT_COLOR = "edit_color"
 }

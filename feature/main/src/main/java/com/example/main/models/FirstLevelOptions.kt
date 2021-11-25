@@ -24,4 +24,11 @@ sealed class FirstLevelOptions : IPhotoOption {
         override val drawableId: Int
             get() = R.drawable.ic_rotate_right_24
     }
+
+    object ColorOption : FirstLevelOptions() {
+        override val nameId: Int
+            get() = R.string.color_option
+        override val drawableId: Int
+            get() = R.drawable.ic_color_24
+    }
 }

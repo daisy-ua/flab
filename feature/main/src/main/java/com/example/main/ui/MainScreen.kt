@@ -22,6 +22,7 @@ fun MainScreen(
     navigateToTuneScreen: () -> Unit,
     navigateToClarityScreen: () -> Unit,
     navigateToRotateScreen: () -> Unit,
+    navigateToColorScreen: () -> Unit
 ) {
     val context = LocalContext.current
     var saveClicked by remember { mutableStateOf(false) }
@@ -62,7 +63,8 @@ fun MainScreen(
                 photoOptions = listOf(
                     Pair(FirstLevelOptions.TuneOption, navigateToTuneScreen),
                     Pair(FirstLevelOptions.Clarity, navigateToClarityScreen),
-                    Pair(FirstLevelOptions.FlipRotateOption, navigateToRotateScreen)
+                    Pair(FirstLevelOptions.FlipRotateOption, navigateToRotateScreen),
+                    Pair(FirstLevelOptions.ColorOption, navigateToColorScreen)
                 )
             )
         }

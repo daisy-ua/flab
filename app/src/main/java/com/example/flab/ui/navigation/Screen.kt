@@ -31,4 +31,9 @@ sealed class Screen(
         route = ScreenConstants.EDIT_ROTATE,
         arguments = emptyList()
     )
+
+    object ColorEdit : Screen(
+        route = ScreenConstants.EDIT_COLOR,
+        arguments = emptyList()
+    )
 }

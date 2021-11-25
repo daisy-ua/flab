@@ -2,4 +2,5 @@
 <resources>
     <string name="tune_option">Tune</string>
     <string name="flip_rotate_option">Rotate</string>
+    <string name="color_option">Color</string>
 </resources>
