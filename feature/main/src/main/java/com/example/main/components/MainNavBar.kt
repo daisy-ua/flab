@@ -10,7 +10,10 @@ import androidx.compose.ui.unit.dp
 import com.example.main.R
 
 @Composable
-fun MainNavTopBar() {
+fun MainNavTopBar(
+    onOpenClick: () -> Unit = { },
+    onSaveClick: () -> Unit = { },
+) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -19,12 +22,14 @@ fun MainNavTopBar() {
     ) {
         NavBarTextBtn(
             text = stringResource(id = R.string.open_image),
-            modifier = Modifier.align(Alignment.CenterStart)
+            modifier = Modifier.align(Alignment.CenterStart),
+            onCLick = onOpenClick
         )
 
         NavBarTextBtn(
             text = stringResource(id = R.string.save_image),
-            modifier = Modifier.align(Alignment.CenterEnd)
+            modifier = Modifier.align(Alignment.CenterEnd),
+            onCLick = onSaveClick
         )
     }
 }
