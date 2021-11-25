@@ -24,7 +24,7 @@ import com.example.home.utils.RequestPermission
 @Composable
 fun HomeScreen(
     logoId: Int,
-    navigateToMainScreen: (String) -> Unit
+    navigateToMainScreen: (String) -> Unit,
 ) {
     var imageUri by remember { mutableStateOf(EMPTY_IMAGE_URI) }
     if (imageUri != EMPTY_IMAGE_URI)

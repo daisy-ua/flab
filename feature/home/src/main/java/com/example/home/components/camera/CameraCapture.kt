@@ -14,24 +14,21 @@ import androidx.compose.ui.platform.LocalContext
 
 @Composable
 fun CameraCapture(
-    onImageUri: (Uri) -> Unit = { }
+    onImageUri: (Uri) -> Unit = { },
 ) {
     val context = LocalContext.current
 
     val imageUri = saveMediaToStorage(context)
 
     val launcher = rememberLauncherForActivityResult(
-        contract = object : ActivityResultContracts.TakePicturePreview()  {
+        contract = object : ActivityResultContracts.TakePicturePreview() {
             override fun createIntent(context: Context, input: Void?): Intent {
-
                 return super.createIntent(context, input).putExtra(EXTRA_OUTPUT, imageUri)
             }
         }
 
-    ) { bitmap ->
-        bitmap?.let {
-            onImageUri(imageUri)
-        }
+    ) {
+        onImageUri(imageUri)
     }
 
     @Composable
