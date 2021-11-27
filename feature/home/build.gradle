@@ -13,4 +13,5 @@ dependencies {
     implementation "androidx.camera:camera-lifecycle:${camerax_stable_version}"
     implementation "androidx.camera:camera-view:1.0.0-alpha30"
     implementation "com.google.accompanist:accompanist-permissions:0.21.1-beta"
+    implementation project(path: ':feature:storage')
 }

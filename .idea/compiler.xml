@@ -6,9 +6,11 @@
       <module name="flab.components" target="11" />
       <module name="flab.feature.home" target="11" />
       <module name="flab.feature.main" target="11" />
+      <module name="flab.feature.storage" target="11" />
       <module name="flab.imagesource" target="11" />
       <module name="flab.library" target="11" />
       <module name="flab.opencv" target="11" />
+      <module name="flab.storage" target="11" />
     </bytecodeTargetLevel>
   </component>
 </project>

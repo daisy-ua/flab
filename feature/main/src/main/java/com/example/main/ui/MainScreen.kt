@@ -12,9 +12,11 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.components.DefaultScreenUI
 import com.example.imagesource.SourceViewModel
 import com.example.main.components.MainNavTopBar
+import com.example.main.components.NotifyToast
 import com.example.main.components.OptionsBottomBar
-import com.example.main.components.SaveToGallery
 import com.example.main.models.FirstLevelOptions
+import com.example.storage.IOProcesses
+import kotlinx.coroutines.launch
 
 @Composable
 fun MainScreen(
@@ -22,14 +24,16 @@ fun MainScreen(
     navigateToTuneScreen: () -> Unit,
     navigateToClarityScreen: () -> Unit,
     navigateToRotateScreen: () -> Unit,
-    navigateToColorScreen: () -> Unit
+    navigateToColorScreen: () -> Unit,
 ) {
     val context = LocalContext.current
-    var saveClicked by remember { mutableStateOf(false) }
+    var sourceSaved by remember { mutableStateOf(false) }
 
-    if (saveClicked) {
-        SaveToGallery(context, sourceViewModel.currentSource!!)
-        saveClicked = false
+    val scope = rememberCoroutineScope()
+
+    if (sourceSaved) {
+        NotifyToast(context)
+        sourceSaved = false
     }
 
     DefaultScreenUI {
@@ -44,7 +48,19 @@ fun MainScreen(
             Column {
 
                 MainNavTopBar(
-                    onSaveClick = { saveClicked = true }
+                    onSaveClick = {
+                        scope.launch {
+                            try {
+                                IOProcesses.saveMediaToStorage(
+                                    context,
+                                    sourceViewModel.currentSource!!,
+                                )
+                                sourceSaved = true
+                            } catch (ex: Exception) {
+
+                            }
+                        }
+                    }
                 )
 
                 Image(

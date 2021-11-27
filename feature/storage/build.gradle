@@ -4,8 +4,5 @@ dependencies {
     implementation "androidx.compose.runtime:runtime:1.1.0-beta03"
     implementation "androidx.compose.runtime:runtime-livedata:1.1.0-beta03"
     implementation project(path: ':components')
-    implementation project(path: ':imagesource')
-    implementation project(path: ':library')
     implementation project(path: ':constants')
-    implementation project(path: ':feature:storage')
 }

@@ -7,9 +7,9 @@ import android.provider.MediaStore.EXTRA_OUTPUT
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.result.launch
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.*
 import androidx.compose.ui.platform.LocalContext
+import com.example.storage.IOProcesses
 
 
 @Composable
@@ -18,7 +18,11 @@ fun CameraCapture(
 ) {
     val context = LocalContext.current
 
-    val imageUri = saveMediaToStorage(context)
+    var imageUri by remember { mutableStateOf<Uri?>(null) }
+
+    LaunchedEffect(key1 = false) {
+        imageUri = IOProcesses.saveEmptyMediaToStorage(context)
+    }
 
     val launcher = rememberLauncherForActivityResult(
         contract = object : ActivityResultContracts.TakePicturePreview() {
@@ -28,13 +32,17 @@ fun CameraCapture(
         }
 
     ) {
-        onImageUri(imageUri)
+        imageUri?.let { uri ->
+            onImageUri(uri)
+        }
     }
 
     @Composable
     fun LaunchCamera() {
-        SideEffect {
-            launcher.launch()
+        imageUri?.let {
+            SideEffect {
+                launcher.launch()
+            }
         }
     }
 

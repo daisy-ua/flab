@@ -1,21 +1,19 @@
 package com.example.main.components
 
 import android.content.Context
-import android.graphics.Bitmap
 import android.widget.Toast
 import androidx.compose.runtime.Composable
-import com.example.main.utils.saveToGallery
+import androidx.compose.ui.res.stringResource
+import com.example.main.R
 
 @Composable
-fun SaveToGallery(context: Context, source: Bitmap) {
-    saveToGallery(
-        context,
-        source
-    )
-
+fun NotifyToast(
+    context: Context,
+    saveTest: String = stringResource(id = R.string.saved_gallery),
+) {
     Toast.makeText(
         context,
-        "Image was saved to Gallery",
+        saveTest,
         Toast.LENGTH_SHORT
     ).show()
 }
