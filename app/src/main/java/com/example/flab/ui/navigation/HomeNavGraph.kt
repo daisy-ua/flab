@@ -31,9 +31,7 @@ fun NavGraphBuilder.homeGraph(navController: NavHostController, vm: SourceViewMo
                     "/{${ScreenConstants.MAIN_IMAGE_ARGUMENT}}"
         ) { backStackEntry ->
             val uri = backStackEntry.arguments?.getString(ScreenConstants.MAIN_IMAGE_ARGUMENT)
-            vm.sourceString = uri
-            vm.sourceUri = Uri.parse(uri)
-            vm.currentSource = vm.originalSource
+            vm.setupBitmap(Uri.parse(uri))
             CreateMainScreen(navController, vm)
         }
 
