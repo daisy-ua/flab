@@ -1,6 +1,6 @@
 package com.example.main
 
-import com.example.main.constants.BrightnessConstants
+import flab.editor.library.constants.BrightnessConstants
 import com.example.main.ui.options.convertPercentageToValue
 import org.junit.Assert.assertEquals
 import org.junit.Test

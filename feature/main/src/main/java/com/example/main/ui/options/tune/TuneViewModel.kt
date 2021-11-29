@@ -12,14 +12,17 @@ import flab.editor.library.adjust.Tune
 
 class TuneViewModel(bitmap: Bitmap) : ViewModel() {
     var source by mutableStateOf(bitmap)
-        private set
+//        private set
 
-    private val tune = Tune(source)
+    var src by mutableStateOf<Bitmap?>(null)
+
+    private val tune by lazy { Tune(src!!) }
 
     fun setBrightnessContrast(contrast: Float, brightness: Float) {
-        source = tune.setBrightnessContrast(
+        src = tune.setBrightnessContrast(
             convertPercentageToValue(contrast, ContrastConstants),
             convertPercentageToValue(brightness, BrightnessConstants),
         )
     }
+
 }

@@ -17,4 +17,6 @@ open class ImageProcessing(
     }
 
     fun saveResult(source: Mat = src) = Utils.matToBitmap(source, result)
+
+    fun updateSource(bitmap: Bitmap) = Utils.bitmapToMat(bitmap, src)
 }
