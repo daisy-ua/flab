@@ -8,8 +8,8 @@ import flab.editor.library.adjust.Tune
 class ImageProcessManager(private val bitmap: Bitmap) {
     //TODO:convert all to  : Mat
     val tune: Tune by lazy { Tune(bitmap) }
-    private val sharpness: Sharpness by lazy { Sharpness(bitmap) }
-    private val hsvTransform: HSVTransform by lazy { HSVTransform(bitmap) }
+    val sharpness: Sharpness by lazy { Sharpness(bitmap) }
+    val hsvTransform: HSVTransform by lazy { HSVTransform(bitmap) }
 
     fun updateSource(
         contrast: Double?,

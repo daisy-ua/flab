@@ -10,8 +10,13 @@ import com.example.imagesource.SourceViewModel
 import com.example.main.components.AmountSlider
 import com.example.main.components.DefaultOptionScreen
 import com.example.main.components.OptionsBottomBar
+import com.example.main.constants.HueConstants
+import com.example.main.constants.SaturationConstants
+import com.example.main.constants.ValueConstants
 import com.example.main.models.ColorScreenOptions
-import com.example.main.ui.options.ColorViewModelFactory
+import com.example.main.ui.options.convertPercentageToValue
+import com.example.main.ui.options.convertValueToPercentage
+import com.example.main.ui.options.tune.constants.BrightnessConstants
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
@@ -22,13 +27,39 @@ fun ColorScreen(
     sourceViewModel: SourceViewModel = viewModel(),
     save: () -> Unit,
 ) {
-    val screenViewModel: ColorViewModel =
-        viewModel(factory = ColorViewModelFactory(sourceViewModel.currentSource!!))
+    val screenViewModel: ColorViewModel = viewModel()
     val bitmap = screenViewModel.source
 
-    var hueValue by remember { mutableStateOf(0f) }
-    var saturationValue by remember { mutableStateOf(0f) }
-    var brightnessValue by remember { mutableStateOf(0f) }
+    var hueValue by remember {
+        mutableStateOf(
+            sourceViewModel.hueValue?.let { _hue ->
+                convertValueToPercentage(
+                    _hue.toFloat(),
+                    HueConstants
+                )
+            } ?: 0f
+        )
+    }
+    var saturationValue by remember {
+        mutableStateOf(
+            sourceViewModel.saturationValue?.let { _saturation ->
+                convertValueToPercentage(
+                    _saturation.toFloat(),
+                    SaturationConstants
+                )
+            } ?: 0f
+        )
+    }
+    var brightnessValue by remember {
+        mutableStateOf(
+            sourceViewModel.valueValue?.let { _brightness ->
+                convertValueToPercentage(
+                    _brightness.toFloat(),
+                    BrightnessConstants
+                )
+            } ?: 0f
+        )
+    }
 
     var sliderValue by remember { mutableStateOf<Float?>(null) }
     var onValueChange by remember { mutableStateOf({ }) }
@@ -38,11 +69,34 @@ fun ColorScreen(
         mutableStateOf(null)
     }
 
+    LaunchedEffect(key1 = true) {
+        sourceViewModel.updateSource(hue = null, saturation = null, value = null)
+        screenViewModel.processManager = sourceViewModel.processManager
+        screenViewModel.processManager?.hsvTransform?.updateSource(sourceViewModel.currentSource!!)
+        if (hueValue == 0f && saturationValue == 0f && brightnessValue == 0f) {
+            screenViewModel.source = sourceViewModel.currentSource!!
+        } else {
+            screenViewModel.setColorTransform(
+                hueValue,
+                saturationValue,
+                brightnessValue
+            )
+        }
+    }
+
     DefaultOptionScreen(
         modifier = modifier.fillMaxWidth(),
-        bitmapImage = bitmap.asImageBitmap(),
+        bitmapImage = bitmap?.asImageBitmap(),
         onSave = {
             sourceViewModel.currentSource = bitmap
+            sourceViewModel.hueValue =
+                convertPercentageToValue(hueValue, HueConstants)
+            sourceViewModel.saturationValue =
+                convertPercentageToValue(saturationValue, SaturationConstants)
+            sourceViewModel.valueValue =
+                convertPercentageToValue(brightnessValue, ValueConstants)
+            screenViewModel.source = null
+            screenViewModel.processManager = null
             save()
         }
     ) {
@@ -53,7 +107,7 @@ fun ColorScreen(
                     onValueChange = { sliderValue = it },
                     onValueChangeFinished = {
                         job?.cancel()
-                        job = scope.launch(Dispatchers.Default) {
+                        job = scope.launch(Dispatchers.Main) {
                             try {
                                 onValueChange()
                                 screenViewModel.setColorTransform(

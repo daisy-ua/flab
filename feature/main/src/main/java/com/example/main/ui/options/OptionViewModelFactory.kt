@@ -16,23 +16,9 @@ class OptionViewModelFactory(private val bitmap: Bitmap): ViewModelProvider.Fact
     }
 }
 
-class TuneViewModelFactory(private val bitmap: Bitmap): ViewModelProvider.Factory {
-    @Suppress("UNCHECKED_CAST")
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        return TuneViewModel(bitmap) as T
-    }
-}
-
 class SharpnessViewModelFactory(private val bitmap: Bitmap): ViewModelProvider.Factory {
     @Suppress("UNCHECKED_CAST")
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         return SharpnessViewModel(bitmap) as T
-    }
-}
-
-class ColorViewModelFactory(private val bitmap: Bitmap): ViewModelProvider.Factory {
-    @Suppress("UNCHECKED_CAST")
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        return ColorViewModel(bitmap) as T
     }
 }

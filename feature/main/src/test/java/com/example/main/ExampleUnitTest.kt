@@ -1,7 +1,7 @@
 package com.example.main
 
-import flab.editor.library.constants.BrightnessConstants
-import com.example.main.ui.options.convertPercentageToValue
+import com.example.main.ui.options.tune.constants.ContrastConstants
+import com.example.main.ui.options.convertValueToPercentage
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
@@ -13,6 +13,11 @@ import org.junit.Test
 class ExampleUnitTest {
     @Test
     fun addition_isCorrect() {
-        assertEquals(-100, convertPercentageToValue(-100f, BrightnessConstants))
+        assertEquals(0, convertValueToPercentage(1f, ContrastConstants))
+    }
+
+    @Test
+    fun addition_isCorrect2() {
+        assertEquals(100, convertValueToPercentage(3f, ContrastConstants))
     }
 }

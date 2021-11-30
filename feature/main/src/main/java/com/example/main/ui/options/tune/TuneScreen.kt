@@ -1,23 +1,22 @@
 package com.example.main.ui.options.tune
 
-import android.graphics.Bitmap
-import android.util.Log
+import androidx.activity.ComponentActivity
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.imagesource.SourceViewModel
 import com.example.main.components.AmountSlider
 import com.example.main.components.DefaultOptionScreen
 import com.example.main.components.OptionsBottomBar
-import com.example.main.constants.BrightnessConstants
-import com.example.main.constants.ContrastConstants
+import com.example.main.ui.options.tune.constants.BrightnessConstants
+import com.example.main.ui.options.tune.constants.ContrastConstants
 import com.example.main.models.TuneScreenOptions
-import com.example.main.ui.options.TuneViewModelFactory
 import com.example.main.ui.options.convertPercentageToValue
-import flab.editor.library.adjust.Tune
+import com.example.main.ui.options.convertValueToPercentage
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
@@ -26,15 +25,32 @@ import kotlinx.coroutines.launch
 @Composable
 fun TuneScreen(
     modifier: Modifier = Modifier,
-    sourceViewModel: SourceViewModel = viewModel(),
+    sourceViewModel: SourceViewModel = viewModel(LocalContext.current as ComponentActivity),
+    screenViewModel: TuneViewModel = viewModel(),
     save: () -> Unit,
 ) {
-    val screenViewModel: TuneViewModel =
-        viewModel(factory = TuneViewModelFactory(sourceViewModel.currentSource!!))
-    val bitmap = screenViewModel.src
+    val bitmap = screenViewModel.source
 
-    var contrastValue by remember { mutableStateOf(sourceViewModel.contrastValue.toFloat()) }
-    var brightnessValue by remember { mutableStateOf(sourceViewModel.brightnessValue.toFloat()) }
+    var contrastValue by remember {
+        mutableStateOf(
+            sourceViewModel.contrastValue?.let { _contrast ->
+                convertValueToPercentage(
+                    _contrast.toFloat(),
+                    ContrastConstants
+                )
+            } ?: 0f
+        )
+    }
+    var brightnessValue by remember {
+        mutableStateOf(
+            sourceViewModel.brightnessValue?.let { _brightness ->
+                convertValueToPercentage(
+                    _brightness.toFloat(),
+                    BrightnessConstants
+                )
+            } ?: 0f
+        )
+    }
 
     var sliderValue by remember { mutableStateOf<Float?>(null) }
     var onValueChange by remember { mutableStateOf({ }) }
@@ -45,12 +61,17 @@ fun TuneScreen(
     }
 
     LaunchedEffect(key1 = true) {
-        sourceViewModel.updateSource(null, null)
-        screenViewModel.source = sourceViewModel.currentSource!!
-        screenViewModel.src = sourceViewModel.currentSource!!
-
-//        screenViewModel.setBrightnessContrast(contrastValue, brightnessValue)
-
+        sourceViewModel.updateSource(contrast = null, brightness = null)
+        screenViewModel.processManager = sourceViewModel.processManager
+        screenViewModel.processManager?.tune?.updateSource(sourceViewModel.currentSource!!)
+        if (contrastValue == 0f && brightnessValue == 0f) {
+            screenViewModel.source = sourceViewModel.currentSource
+        } else {
+            screenViewModel.setBrightnessContrast(
+                contrastValue,
+                brightnessValue
+            )
+        }
     }
 
     DefaultOptionScreen(
@@ -58,8 +79,10 @@ fun TuneScreen(
         bitmapImage = bitmap?.asImageBitmap(),
         onSave = {
             sourceViewModel.currentSource = bitmap
-            sourceViewModel.contrastValue = contrastValue.toDouble()
-            sourceViewModel.brightnessValue = brightnessValue.toDouble()
+            sourceViewModel.contrastValue =
+                convertPercentageToValue(contrastValue, ContrastConstants)
+            sourceViewModel.brightnessValue =
+                convertPercentageToValue(brightnessValue, BrightnessConstants)
             save()
         }
     ) {
@@ -70,10 +93,13 @@ fun TuneScreen(
                     onValueChange = { sliderValue = it },
                     onValueChangeFinished = {
                         job?.cancel()
-                        job = scope.launch(Dispatchers.Default) {
+                        job = scope.launch(Dispatchers.Main) {
                             try {
                                 onValueChange()
-                                screenViewModel.setBrightnessContrast(contrastValue,brightnessValue)
+                                screenViewModel.setBrightnessContrast(
+                                    contrastValue,
+                                    brightnessValue
+                                )
                             } catch (ex: Exception) {
                             }
                         }

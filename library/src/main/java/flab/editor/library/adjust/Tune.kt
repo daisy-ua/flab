@@ -51,7 +51,7 @@ class Tune(
     ): Bitmap {
         var dst = Mat()
         src.convertTo(dst, -1, alpha, beta)
-        dst = performGammaCorrection(dst)
+//        dst = performGammaCorrection(dst)
         saveResult(dst)
         return result
     }

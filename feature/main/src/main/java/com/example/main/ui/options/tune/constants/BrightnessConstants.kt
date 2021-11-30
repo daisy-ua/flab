@@ -1,6 +1,6 @@
-package flab.editor.library.constants
+package com.example.main.ui.options.tune.constants
 
-import flab.editor.library.constants.SliderConstants
+import com.example.main.constants.SliderConstants
 
 object BrightnessConstants : SliderConstants {
     override val min: Float

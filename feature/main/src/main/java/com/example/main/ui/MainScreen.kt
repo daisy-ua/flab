@@ -1,5 +1,6 @@
 package com.example.main.ui
 
+import androidx.activity.ComponentActivity
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.*
@@ -20,7 +21,7 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun MainScreen(
-    sourceViewModel: SourceViewModel = viewModel(),
+    sourceViewModel: SourceViewModel = viewModel(LocalContext.current as ComponentActivity),
     navigateToTuneScreen: () -> Unit,
     navigateToClarityScreen: () -> Unit,
     navigateToRotateScreen: () -> Unit,
@@ -35,6 +36,8 @@ fun MainScreen(
         NotifyToast(context)
         sourceSaved = false
     }
+
+    val bitmap = sourceViewModel.currentSource
 
     DefaultScreenUI {
         BoxWithConstraints(
@@ -53,7 +56,7 @@ fun MainScreen(
                             try {
                                 IOProcesses.saveMediaToStorage(
                                     context,
-                                    sourceViewModel.currentSource!!,
+                                    bitmap!!,
                                 )
                                 sourceSaved = true
                             } catch (ex: Exception) {
@@ -63,13 +66,15 @@ fun MainScreen(
                     }
                 )
 
-                Image(
-                    bitmap = sourceViewModel.currentSource!!.asImageBitmap(),
-                    contentDescription = "",
-                    modifier = Modifier
-                        .width(itemWidth)
-                        .height(itemHeight)
-                )
+                bitmap?.asImageBitmap()?.let {
+                    Image(
+                        bitmap = it,
+                        contentDescription = "",
+                        modifier = Modifier
+                            .width(itemWidth)
+                            .height(itemHeight)
+                    )
+                }
             }
 
             OptionsBottomBar(
