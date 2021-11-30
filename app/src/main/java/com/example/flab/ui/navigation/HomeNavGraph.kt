@@ -1,6 +1,7 @@
 package com.example.flab.ui.navigation
 
 import android.net.Uri
+import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
@@ -18,21 +19,7 @@ fun NavGraphBuilder.homeGraph(navController: NavHostController, vm: SourceViewMo
         route = ScreenConstants.HOME_GRAPH_ROUTE
     ) {
         composable(Screen.Home.route) {
-            HomeScreen(
-                R.drawable.ic_logo_stroke,
-                navigateToMainScreen = { imageUri ->
-                    navigateToMainScreen(navController, imageUri)
-                }
-            )
-        }
-
-        composable(
-            Screen.Main.route +
-                    "/{${ScreenConstants.MAIN_IMAGE_ARGUMENT}}"
-        ) { backStackEntry ->
-            val uri = backStackEntry.arguments?.getString(ScreenConstants.MAIN_IMAGE_ARGUMENT)
-            vm.setupBitmap(Uri.parse(uri))
-            CreateMainScreen(navController, vm)
+            CreateHomeScreen(navController, vm)
         }
 
         composable(Screen.Main.route) {
@@ -51,8 +38,20 @@ private fun CreateMainScreen(navController: NavHostController, vm: SourceViewMod
         navigateToColorScreen = { navController.navigate(Screen.ColorEdit.route) }
     )
 
-private fun navigateToMainScreen(navController: NavHostController, imageUri: String) =
-    navController.navigate("${Screen.Main.route}/$imageUri") {
+@Composable
+private fun CreateHomeScreen(navController: NavHostController, vm: SourceViewModel) {
+    HomeScreen(
+        R.drawable.ic_logo_stroke,
+        navigateToMainScreen = { imageUri ->
+            val uriDecoded = Uri.decode(imageUri)
+            vm.setupBitmap(Uri.parse(uriDecoded))
+            navigateToMainScreen(navController)
+        }
+    )
+}
+
+private fun navigateToMainScreen(navController: NavHostController) =
+    navController.navigate(Screen.Main.route) {
         popUpTo(Screen.Home.route) { inclusive = true }
         launchSingleTop = true
     }

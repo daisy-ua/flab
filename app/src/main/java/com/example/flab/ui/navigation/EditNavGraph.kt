@@ -19,48 +19,28 @@ fun NavGraphBuilder.editGraph(navController: NavHostController, vm: SourceViewMo
         composable(Screen.TuneEdit.route) {
             TuneScreen(
                 sourceViewModel = vm,
-                save = {
-                    navController.navigate(Screen.Main.route) {
-                        popUpTo(Screen.Home.route)
-                        launchSingleTop = true
-                    }
-                }
+                save = { navController.popBackStack() }
             )
         }
 
         composable(Screen.FlipRotateEdit.route) {
             FlipRotateScreen(
                 sourceViewModel = vm,
-                save = {
-                    navController.navigate(Screen.Main.route) {
-                        popUpTo(Screen.Home.route)
-                        launchSingleTop = true
-                    }
-                }
+                save = { navController.popBackStack() }
             )
         }
 
         composable(Screen.ClarityEdit.route) {
             SharpnessScreen(
                 sourceViewModel = vm,
-                save = {
-                    navController.navigate(Screen.Main.route) {
-                        popUpTo(Screen.Home.route)
-                        launchSingleTop = true
-                    }
-                }
+                save = { navController.popBackStack() }
             )
         }
 
         composable(Screen.ColorEdit.route) {
             ColorScreen(
                 sourceViewModel = vm,
-                save = {
-                    navController.navigate(Screen.Main.route) {
-                        popUpTo(Screen.Home.route)
-                        launchSingleTop = true
-                    }
-                }
+                save = { navController.popBackStack() }
             )
         }
     }
