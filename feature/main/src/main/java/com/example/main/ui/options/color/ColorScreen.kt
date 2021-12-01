@@ -1,5 +1,7 @@
 package com.example.main.ui.options.color
 
+import android.graphics.Bitmap
+import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.*
@@ -10,13 +12,12 @@ import com.example.imagesource.SourceViewModel
 import com.example.main.components.AmountSlider
 import com.example.main.components.DefaultOptionScreen
 import com.example.main.components.OptionsBottomBar
-import com.example.main.constants.HueConstants
-import com.example.main.constants.SaturationConstants
-import com.example.main.constants.ValueConstants
+import com.example.main.ui.options.color.constants.HueConstants
+import com.example.main.ui.options.color.constants.SaturationConstants
+import com.example.main.ui.options.color.constants.ValueConstants
 import com.example.main.models.ColorScreenOptions
 import com.example.main.ui.options.convertPercentageToValue
 import com.example.main.ui.options.convertValueToPercentage
-import com.example.main.ui.options.tune.constants.BrightnessConstants
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
@@ -55,7 +56,7 @@ fun ColorScreen(
             sourceViewModel.valueValue?.let { _brightness ->
                 convertValueToPercentage(
                     _brightness.toFloat(),
-                    BrightnessConstants
+                    ValueConstants
                 )
             } ?: 0f
         )
@@ -69,18 +70,37 @@ fun ColorScreen(
         mutableStateOf(null)
     }
 
+    var hsvBitmap: Bitmap? = null
+    val originalSource = sourceViewModel.processManager?.originalSource!!
+    val tuneBitmap = sourceViewModel.processManager!!.applyLinearTransform(
+        sourceViewModel.contrastValue,
+        sourceViewModel.brightnessValue,
+        originalSource
+    ) ?: originalSource
+
     LaunchedEffect(key1 = true) {
-        sourceViewModel.updateSource(hue = null, saturation = null, value = null)
-        screenViewModel.processManager = sourceViewModel.processManager
-        screenViewModel.processManager?.hsvTransform?.updateSource(sourceViewModel.currentSource!!)
+        screenViewModel.setupProcessor(originalSource)
         if (hueValue == 0f && saturationValue == 0f && brightnessValue == 0f) {
-            screenViewModel.source = sourceViewModel.currentSource!!
+            screenViewModel.source =
+                sourceViewModel.processManager?.blend?.blend(tuneBitmap, originalSource)
         } else {
-            screenViewModel.setColorTransform(
-                hueValue,
-                saturationValue,
-                brightnessValue
+            sourceViewModel.processManager!!.hsvTransform.updateSource(originalSource)
+
+            hsvBitmap = sourceViewModel.processManager!!.applyHSVTransform(
+                sourceViewModel.hueValue,
+                sourceViewModel.saturationValue,
+                sourceViewModel.valueValue
             )
+
+            Log.d("rita", "${tuneBitmap.width}   ++  ${hsvBitmap?.width}")
+
+
+            screenViewModel.source =
+                sourceViewModel.processManager?.blend?.blend(tuneBitmap, hsvBitmap!!)
+        }
+
+        sourceViewModel.sharpnessValue?.let {
+            screenViewModel.source = sourceViewModel.resetSource(source = screenViewModel.source!!)
         }
     }
 
@@ -88,6 +108,7 @@ fun ColorScreen(
         modifier = modifier.fillMaxWidth(),
         bitmapImage = bitmap?.asImageBitmap(),
         onSave = {
+            sourceViewModel.hsvBitmap = hsvBitmap
             sourceViewModel.currentSource = bitmap
             sourceViewModel.hueValue =
                 convertPercentageToValue(hueValue, HueConstants)
@@ -95,8 +116,6 @@ fun ColorScreen(
                 convertPercentageToValue(saturationValue, SaturationConstants)
             sourceViewModel.valueValue =
                 convertPercentageToValue(brightnessValue, ValueConstants)
-            screenViewModel.source = null
-            screenViewModel.processManager = null
             save()
         }
     ) {
@@ -110,11 +129,15 @@ fun ColorScreen(
                         job = scope.launch(Dispatchers.Main) {
                             try {
                                 onValueChange()
-                                screenViewModel.setColorTransform(
-                                    hueValue,
-                                    saturationValue,
-                                    brightnessValue
+                                hsvBitmap = screenViewModel.hsvTransform?.setHSVTransform(
+                                    convertPercentageToValue(hueValue, HueConstants),
+                                    convertPercentageToValue(saturationValue, SaturationConstants),
+                                    convertPercentageToValue(brightnessValue, ValueConstants)
                                 )
+                                val source = sourceViewModel.processManager?.blend?.blend(tuneBitmap, hsvBitmap!!)
+                                screenViewModel.source = sourceViewModel.sharpnessValue?.let {
+                                        sourceViewModel.resetSource(source = source!!)
+                                } ?: source
                             } catch (ex: Exception) {
                             }
                         }

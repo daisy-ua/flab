@@ -5,27 +5,36 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import com.example.main.constants.GaussianKernelConstants
+import com.example.main.ui.options.sharpness.constants.GaussianKernelConstants
 import com.example.main.ui.options.convertPercentageToValue
+import flab.editor.library.adjust.HSVTransform
+import flab.editor.library.adjust.Sharpness
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
-class SharpnessViewModel(bitmap: Bitmap) : ViewModel() {
-    var source by mutableStateOf(bitmap)
-        private set
+class SharpnessViewModel() : ViewModel() {
+    var source by mutableStateOf<Bitmap?>(null)
 
-    private val sharpness = flab.editor.library.adjust.Sharpness(source)
+    var sharpness: Sharpness? = null
 
-    fun setSharpness(value: Float) {
+    fun setupProcessor(bitmap: Bitmap) {
+        sharpness = Sharpness(bitmap)
+    }
+
+    suspend fun setSharpness(value: Float) {
         val kernelSize = getConvertedKernelSize(value)
         source = getSharpenedBitmap(kernelSize)
     }
 
-    private fun getSharpenedBitmap(kernelSize: Double) : Bitmap {
-        return if (kernelSize > 0)
-            sharpness.sharpen(kernelSize)
-        else sharpness.blur(-kernelSize)
+    private suspend fun getSharpenedBitmap(kernelSize: Double) : Bitmap? {
+        return withContext(Dispatchers.Default) {
+            if (kernelSize > 0)
+                sharpness?.sharpen(kernelSize)
+            else sharpness?.blur(-kernelSize)
+        }
     }
 
-    private fun getConvertedKernelSize(value: Float): Double {
+    fun getConvertedKernelSize(value: Float): Double {
         var kernelSize = convertPercentageToValue(value, GaussianKernelConstants)
         if (kernelSize.toInt() % 2 == 0)
             kernelSize += 1.0

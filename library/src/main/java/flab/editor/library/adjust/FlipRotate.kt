@@ -7,17 +7,17 @@ import flab.editor.library.ImageProcessing
 import org.opencv.core.Core
 
 class FlipRotate(
-    bitmap: Bitmap
+    bitmap: Bitmap,
 ) : ImageProcessing(bitmap) {
 
-    fun flip(axis: FlipAlignment) : Bitmap {
+    fun flip(axis: FlipAlignment): Bitmap {
         Core.flip(src, src, axis.code)
         createResultBitmap()
         saveResult()
         return result
     }
 
-    fun rotate(direction: RotateAlignment) : Bitmap {
+    fun rotate(direction: RotateAlignment): Bitmap {
         Core.transpose(src, src)
         return flip(direction.code)
     }

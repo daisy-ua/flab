@@ -1,5 +1,7 @@
 package com.example.main.ui.options.tune
 
+import android.graphics.Bitmap
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -12,11 +14,11 @@ import com.example.imagesource.SourceViewModel
 import com.example.main.components.AmountSlider
 import com.example.main.components.DefaultOptionScreen
 import com.example.main.components.OptionsBottomBar
-import com.example.main.ui.options.tune.constants.BrightnessConstants
-import com.example.main.ui.options.tune.constants.ContrastConstants
 import com.example.main.models.TuneScreenOptions
 import com.example.main.ui.options.convertPercentageToValue
 import com.example.main.ui.options.convertValueToPercentage
+import com.example.main.ui.options.tune.constants.BrightnessConstants
+import com.example.main.ui.options.tune.constants.ContrastConstants
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
@@ -60,24 +62,48 @@ fun TuneScreen(
         mutableStateOf(null)
     }
 
+    var tuneBitmap: Bitmap? = null
+    val originalSource = sourceViewModel.processManager?.originalSource!!
+    val hsvBitmap = sourceViewModel.processManager!!.run {
+        sourceViewModel.processManager!!.tune.updateSource(originalSource)
+
+        applyHSVTransform(
+            sourceViewModel.hueValue,
+            sourceViewModel.saturationValue,
+            sourceViewModel.valueValue
+        )
+    } ?: originalSource
+
     LaunchedEffect(key1 = true) {
-        sourceViewModel.updateSource(contrast = null, brightness = null)
-        screenViewModel.processManager = sourceViewModel.processManager
-        screenViewModel.processManager?.tune?.updateSource(sourceViewModel.currentSource!!)
+        screenViewModel.setupProcessor(originalSource)
         if (contrastValue == 0f && brightnessValue == 0f) {
-            screenViewModel.source = sourceViewModel.currentSource
+            screenViewModel.source =
+                sourceViewModel.processManager?.blend?.blend(hsvBitmap, originalSource)
         } else {
-            screenViewModel.setBrightnessContrast(
-                contrastValue,
-                brightnessValue
+            sourceViewModel.processManager!!.tune.updateSource(originalSource)
+            tuneBitmap = sourceViewModel.processManager!!.applyLinearTransform(
+                sourceViewModel.contrastValue,
+                sourceViewModel.brightnessValue,
+                originalSource
             )
+            Log.d("rita", "${tuneBitmap?.width}   --  ${hsvBitmap.width}")
+
+
+            screenViewModel.source =
+                sourceViewModel.processManager?.blend?.blend(tuneBitmap!!, hsvBitmap)
         }
+
+        sourceViewModel.sharpnessValue?.let {
+            screenViewModel.source = sourceViewModel.resetSource(source = screenViewModel.source!!)
+        }
+
     }
 
     DefaultOptionScreen(
         modifier = modifier.fillMaxWidth(),
         bitmapImage = bitmap?.asImageBitmap(),
         onSave = {
+            sourceViewModel.tuneBitmap = tuneBitmap
             sourceViewModel.currentSource = bitmap
             sourceViewModel.contrastValue =
                 convertPercentageToValue(contrastValue, ContrastConstants)
@@ -96,10 +122,17 @@ fun TuneScreen(
                         job = scope.launch(Dispatchers.Main) {
                             try {
                                 onValueChange()
-                                screenViewModel.setBrightnessContrast(
-                                    contrastValue,
-                                    brightnessValue
+                                tuneBitmap = screenViewModel.tune?.setBrightnessContrast(
+                                    convertPercentageToValue(contrastValue, ContrastConstants),
+                                    convertPercentageToValue(brightnessValue, BrightnessConstants),
                                 )
+
+                                val source =
+                                    sourceViewModel.processManager?.blend?.blend(tuneBitmap!!,
+                                        hsvBitmap)
+                                screenViewModel.source = sourceViewModel.sharpnessValue?.let {
+                                    sourceViewModel.resetSource(source = source!!)
+                                } ?: source
                             } catch (ex: Exception) {
                             }
                         }

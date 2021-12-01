@@ -29,23 +29,16 @@ class SourceViewModel(
         }
     }
 
-    private var minimizedSource: Bitmap? = null
-
-//    var currentSource: Bitmap? = null
-//    var recompose by mutableStateOf(false)
     var currentSource by mutableStateOf<Bitmap?>(null)
 
-//    fun setCurrent(bitmap: Bitmap?) {
-//        currentSource = bitmap
-//    }
+    var tuneBitmap: Bitmap? = null
+    var hsvBitmap: Bitmap? = null
 
     fun setupBitmap(uri: Uri) {
-        Log.d("rita", "in setup")
         sourceUri = uri
         currentSource = originalSource?.let { src ->
             getScaledDownBitmap(src, MAX_DIM_BITMAP, true)
         }
-//        currentSource = minimizedSource
 
         currentSource?.let { src ->
             processManager = ImageProcessManager(src)
@@ -57,6 +50,7 @@ class SourceViewModel(
     var hueValue by mutableStateOf<Double?>(null)
     var saturationValue by mutableStateOf<Double?>(null)
     var valueValue by mutableStateOf<Double?>(null)
+    var sharpnessValue by mutableStateOf<Double?>(null)
 
     suspend fun updateSource(
         contrast: Double? = contrastValue,
@@ -64,12 +58,27 @@ class SourceViewModel(
         hue: Double? = hueValue,
         saturation: Double? = saturationValue,
         value: Double? = valueValue,
+        sharpness: Double? = sharpnessValue,
     ) {
         withContext(Dispatchers.Main) {
             val bitmap = withContext(Dispatchers.Default) {
-                processManager?.updateSource(contrast, brightness, hue, saturation, value)
+                processManager?.updateSource(contrast, brightness, hue, saturation, value, sharpness)
             }
             currentSource = bitmap
+        }
+    }
+
+    suspend fun resetSource(
+        source: Bitmap,
+        contrast: Double? = contrastValue,
+        brightness: Double? = brightnessValue,
+        hue: Double? = hueValue,
+        saturation: Double? = saturationValue,
+        value: Double? = valueValue,
+        sharpness: Double? = sharpnessValue,
+    ) : Bitmap? {
+        return withContext(Dispatchers.Default) {
+            processManager?.updateSource(contrast, brightness, hue, saturation, value, sharpness, source = source)
         }
     }
 }

@@ -1,4 +1,6 @@
-package com.example.main.constants
+package com.example.main.ui.options.color.constants
+
+import com.example.main.constants.SliderConstants
 
 object SaturationConstants : SliderConstants {
     override val min: Float

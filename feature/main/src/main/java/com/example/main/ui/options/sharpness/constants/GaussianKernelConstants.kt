@@ -1,4 +1,6 @@
-package com.example.main.constants
+package com.example.main.ui.options.sharpness.constants
+
+import com.example.main.constants.SliderConstants
 
 object GaussianKernelConstants : SliderConstants {
     override val min: Float

@@ -5,12 +5,14 @@ import org.opencv.android.Utils
 import org.opencv.core.Mat
 
 open class ImageProcessing(
-    bitmap: Bitmap
+    private val bitmap: Bitmap,
 ) {
     protected var src: Mat = Mat()
     protected lateinit var result: Bitmap
 
-    init { Utils.bitmapToMat(bitmap, src) }
+    init {
+        Utils.bitmapToMat(bitmap, src)
+    }
 
     fun createResultBitmap() {
         result = Bitmap.createBitmap(src.cols(), src.rows(), Bitmap.Config.ARGB_8888)
@@ -18,5 +20,10 @@ open class ImageProcessing(
 
     fun saveResult(source: Mat = src) = Utils.matToBitmap(source, result)
 
-    fun updateSource(bitmap: Bitmap) = Utils.bitmapToMat(bitmap, src)
+    fun updateSource(bitmap: Bitmap) {
+        Utils.bitmapToMat(bitmap, src)
+        createResultBitmap()
+    }
+
+    fun getSource() = bitmap
 }

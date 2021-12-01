@@ -15,10 +15,3 @@ class OptionViewModelFactory(private val bitmap: Bitmap): ViewModelProvider.Fact
         return FlipRotateViewModel(bitmap) as T
     }
 }
-
-class SharpnessViewModelFactory(private val bitmap: Bitmap): ViewModelProvider.Factory {
-    @Suppress("UNCHECKED_CAST")
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        return SharpnessViewModel(bitmap) as T
-    }
-}
