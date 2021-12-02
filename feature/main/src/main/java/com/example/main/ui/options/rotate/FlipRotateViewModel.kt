@@ -1,56 +1,65 @@
 package com.example.main.ui.options.rotate
 
 import android.graphics.Bitmap
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.constants.FlipAlignment
-import com.example.constants.RotateAlignment
-import flab.editor.library.adjust.FlipRotate
+import com.example.main.ui.options.rotate.constants.FlipRotateCounter
+import com.example.main.ui.options.tune.IProcessManager
+import flab.editor.library.ImageProcessManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
-class FlipRotateViewModel(bitmap: Bitmap) : ViewModel() {
-    var source by mutableStateOf(bitmap)
-        private set
+class FlipRotateViewModel : ViewModel(), IProcessManager {
+    var source by mutableStateOf<Bitmap?>(null)
+    private val flipRotateCounter = FlipRotateCounter()
 
-    private var flipRotate = FlipRotate(source)
+    override lateinit var processManager: ImageProcessManager
 
-    private var rotateCount = 0
+    fun setup(
+        processManager: ImageProcessManager,
+        initialSource: Bitmap,
+    ) {
+        setupProcessor(processManager)
+        source = initialSource
+    }
 
-//  FIXME: wait for jobs to be done
     fun performFlip() {
-        viewModelScope.launch(Dispatchers.Default) {
-            source = flipRotate.flip(FlipAlignment.Y_AXIS)
-            isFlipped = !isFlipped
-            rotateCount += 2
+        viewModelScope.launch(Dispatchers.Main) {
+            source = withContext(Dispatchers.Default) {
+                processManager.applyFlip()
+            }
+            flipRotateCounter.updateFlipCount()
         }
     }
 
     fun performRotate() {
-        viewModelScope.launch(Dispatchers.Default) {
-            source = flipRotate.rotate(RotateAlignment.RIGHT)
-            rotateCount++
-            if (rotateCount >= 4) rotateCount = 0
-            direction = rotateDirections[rotateCount]
+        viewModelScope.launch(Dispatchers.Main) {
+            source = withContext(Dispatchers.Default) {
+                processManager.applyRotate()
+            }
+            flipRotateCounter.updateRotateCount()
         }
     }
 
-    enum class Directions {
-        UP, RIGHT, DOWN, LEFT
+    suspend fun updateOriginal() = withContext(Dispatchers.Default) {
+        var original = originalSource
+        processManager.updateFlipRotate(original)
+
+        for (direction in flipRotateCounter.rotateDirections) {
+            if (direction.name == flipRotateCounter.direction.name) {
+                break
+            }
+            original = processManager.applyRotate()
+        }
+
+        if (flipRotateCounter.isFlipped) {
+            processManager.updateFlipRotate(original)
+            original = processManager.applyFlip()
+        }
+        return@withContext original
     }
-
-    val rotateDirections = listOf(
-        Directions.UP,
-        Directions.RIGHT,
-        Directions.DOWN,
-        Directions.LEFT
-    )
-
-    var direction = Directions.UP
-
-    var isFlipped = false
 }

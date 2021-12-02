@@ -3,7 +3,6 @@ package com.example.imagesource
 import android.app.Application
 import android.graphics.Bitmap
 import android.net.Uri
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -31,9 +30,6 @@ class SourceViewModel(
 
     var currentSource by mutableStateOf<Bitmap?>(null)
 
-    var tuneBitmap: Bitmap? = null
-    var hsvBitmap: Bitmap? = null
-
     fun setupBitmap(uri: Uri) {
         sourceUri = uri
         currentSource = originalSource?.let { src ->
@@ -52,22 +48,6 @@ class SourceViewModel(
     var valueValue by mutableStateOf<Double?>(null)
     var sharpnessValue by mutableStateOf<Double?>(null)
 
-    suspend fun updateSource(
-        contrast: Double? = contrastValue,
-        brightness: Double? = brightnessValue,
-        hue: Double? = hueValue,
-        saturation: Double? = saturationValue,
-        value: Double? = valueValue,
-        sharpness: Double? = sharpnessValue,
-    ) {
-        withContext(Dispatchers.Main) {
-            val bitmap = withContext(Dispatchers.Default) {
-                processManager?.updateSource(contrast, brightness, hue, saturation, value, sharpness)
-            }
-            currentSource = bitmap
-        }
-    }
-
     suspend fun resetSource(
         source: Bitmap,
         contrast: Double? = contrastValue,
@@ -76,9 +56,31 @@ class SourceViewModel(
         saturation: Double? = saturationValue,
         value: Double? = valueValue,
         sharpness: Double? = sharpnessValue,
-    ) : Bitmap? {
+    ): Bitmap? {
         return withContext(Dispatchers.Default) {
-            processManager?.updateSource(contrast, brightness, hue, saturation, value, sharpness, source = source)
+            processManager?.updateSource(contrast,
+                brightness,
+                hue,
+                saturation,
+                value,
+                sharpness,
+                source = source)
+        }
+    }
+
+    suspend fun getHSVBitmap() : Bitmap? {
+        return withContext(Dispatchers.Default) {
+            processManager?.applyHSVTransform(
+                hueValue, saturationValue, valueValue, processManager!!.originalSource
+            )
+        }
+    }
+
+    suspend fun getTuneBitmap() : Bitmap? {
+        return withContext(Dispatchers.Default) {
+            processManager?.applyLinearTransform(
+                contrastValue, brightnessValue
+            )
         }
     }
 }
