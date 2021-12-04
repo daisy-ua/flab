@@ -36,4 +36,9 @@ sealed class Screen(
         route = ScreenConstants.EDIT_COLOR,
         arguments = emptyList()
     )
+
+    object EffectEdit : Screen(
+        route = ScreenConstants.EDIT_EFFECT,
+        arguments = emptyList()
+    )
 }

@@ -7,6 +7,7 @@ import androidx.navigation.navigation
 import com.example.flab.constants.ScreenConstants
 import com.example.imagesource.SourceViewModel
 import com.example.main.ui.options.color.ColorScreen
+import com.example.main.ui.options.effects.EffectScreen
 import com.example.main.ui.options.rotate.FlipRotateScreen
 import com.example.main.ui.options.sharpness.SharpnessScreen
 import com.example.main.ui.options.tune.TuneScreen
@@ -39,6 +40,13 @@ fun NavGraphBuilder.editGraph(navController: NavHostController, vm: SourceViewMo
 
         composable(Screen.ColorEdit.route) {
             ColorScreen(
+                sourceViewModel = vm,
+                save = { navController.popBackStack() }
+            )
+        }
+
+        composable(Screen.EffectEdit.route) {
+            EffectScreen(
                 sourceViewModel = vm,
                 save = { navController.popBackStack() }
             )

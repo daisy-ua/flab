@@ -9,7 +9,6 @@ import org.opencv.imgproc.Imgproc
 class Filters(
     bitmap: Bitmap
 ) : ImageProcessing(bitmap) {
-    private var dst = src
     private val bgraChannels: List<Mat> = mutableListOf()
 
     init {
@@ -17,22 +16,28 @@ class Filters(
     }
 
     fun applyGrayScale(): Bitmap {
+        val dst = Mat()
         Imgproc.cvtColor(src, dst, Imgproc.COLOR_BGR2GRAY)
+        result = Bitmap.createBitmap(src.cols(), src.rows(), Bitmap.Config.ARGB_8888)
         saveResult(dst)
         return result
     }
 
     fun applyBinary() : Bitmap {
+        val dst = Mat()
         Imgproc.cvtColor(src, dst, Imgproc.COLOR_BGR2GRAY)
         Imgproc.threshold(dst, dst, 127.0, 255.0, Imgproc.THRESH_BINARY)
+        result = Bitmap.createBitmap(src.cols(), src.rows(), Bitmap.Config.ARGB_8888)
 
         saveResult(dst)
         return result
     }
 
     fun applyOtsu() : Bitmap {
+        val dst = Mat()
         Imgproc.cvtColor(src, dst, Imgproc.COLOR_BGR2GRAY)
         Imgproc.threshold(dst, dst, 127.0, 255.0, Imgproc.THRESH_OTSU)
+        result = Bitmap.createBitmap(src.cols(), src.rows(), Bitmap.Config.ARGB_8888)
 
         saveResult(dst)
         return result
@@ -43,13 +48,15 @@ class Filters(
     fun applyColored() = applyKernelTransform(KernelMats.COLORED_MAT)
 
     private fun applyKernelTransform(kernel: Mat): Bitmap {
+        val dst = Mat()
         Core.transform(src, dst, kernel)
+        result = Bitmap.createBitmap(src.cols(), src.rows(), Bitmap.Config.ARGB_8888)
         return saveNormalizedBGR(dst)
     }
 
     private fun saveNormalizedBGR(source: Mat): Bitmap {
         normalizeBGR(source)
-        dst = mergeBGRChannels()
+        val dst = mergeBGRChannels()
         saveResult(dst)
         return result
     }

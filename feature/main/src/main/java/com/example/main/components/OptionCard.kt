@@ -10,19 +10,19 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.unit.sp
 
 
 @Composable
 fun OptionCard(
     modifier: Modifier = Modifier,
-    drawableId: Int,
-    titleId: Int,
+    painter: Painter? = null,
+    imageBitmap: ImageBitmap? = null,
+    title: String,
     onClick: () -> Unit = { },
 ) {
-    val title = stringResource(titleId)
 
     Box(
         modifier = modifier.clickable { onClick() }
@@ -32,7 +32,11 @@ fun OptionCard(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            Image(painter = painterResource(id = drawableId), contentDescription = title)
+            if (painter != null) {
+                Image(painter = painter, contentDescription = title)
+            } else if (imageBitmap != null) {
+                Image(bitmap = imageBitmap, contentDescription = title)
+            }
             Text(text = title, fontSize = 12.sp)
         }
     }

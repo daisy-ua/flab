@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="original_effect">None</string>
+    <string name="grayscale_effect">GreyScale</string>
+    <string name="binary_effect">Binary</string>
+    <string name="otsu_effect">Otsu</string>
+    <string name="sepia_effect">Sepia</string>
+    <string name="colored_effect">Color</string>
+</resources>

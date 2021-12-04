@@ -1,7 +1,6 @@
 package com.example.main.ui.options
 
 import android.graphics.Bitmap
-import com.example.main.ui.options.tune.IProcessManager
 import flab.editor.library.ImageProcessManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext

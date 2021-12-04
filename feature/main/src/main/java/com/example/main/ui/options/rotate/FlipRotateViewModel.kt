@@ -7,7 +7,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.main.ui.options.rotate.constants.FlipRotateCounter
-import com.example.main.ui.options.tune.IProcessManager
+import com.example.main.ui.options.IProcessManager
 import flab.editor.library.ImageProcessManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

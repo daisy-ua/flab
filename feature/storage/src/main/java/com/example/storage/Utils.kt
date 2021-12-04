@@ -18,5 +18,5 @@ internal fun createFileName(context: Context): String {
         current.format(Date())
     }
 
-    return "${context.resources.getString(R.string.project_name)}-$timeStamp.jpg"
+    return "${context.resources.getString(R.string.project_name)}-$timeStamp.jpeg"
 }

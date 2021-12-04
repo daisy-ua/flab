@@ -1,7 +1,6 @@
 package com.example.main.models
 
 import com.example.main.R
-import com.example.main.components.options.IPhotoOption
 
 sealed class ColorScreenOptions : IPhotoOption {
     object HueOption : ColorScreenOptions() {

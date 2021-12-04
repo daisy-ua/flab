@@ -1,4 +1,4 @@
-package com.example.main.ui.options.tune
+package com.example.main.ui.options
 
 import android.graphics.Bitmap
 import flab.editor.library.ImageProcessManager

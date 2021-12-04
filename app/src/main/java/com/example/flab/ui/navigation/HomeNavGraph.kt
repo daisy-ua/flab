@@ -1,7 +1,6 @@
 package com.example.flab.ui.navigation
 
 import android.net.Uri
-import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
@@ -35,7 +34,8 @@ private fun CreateMainScreen(navController: NavHostController, vm: SourceViewMod
         navigateToTuneScreen = { navController.navigate(Screen.TuneEdit.route) },
         navigateToClarityScreen = { navController.navigate(Screen.ClarityEdit.route) },
         navigateToRotateScreen = { navController.navigate(Screen.FlipRotateEdit.route) },
-        navigateToColorScreen = { navController.navigate(Screen.ColorEdit.route) }
+        navigateToColorScreen = { navController.navigate(Screen.ColorEdit.route) },
+        navigateToEffectScreen = { navController.navigate(Screen.EffectEdit.route) }
     )
 
 @Composable

@@ -26,6 +26,7 @@ fun MainScreen(
     navigateToClarityScreen: () -> Unit,
     navigateToRotateScreen: () -> Unit,
     navigateToColorScreen: () -> Unit,
+    navigateToEffectScreen: () -> Unit
 ) {
     val context = LocalContext.current
     var sourceSaved by remember { mutableStateOf(false) }
@@ -85,7 +86,8 @@ fun MainScreen(
                     Pair(FirstLevelOptions.TuneOption, navigateToTuneScreen),
                     Pair(FirstLevelOptions.Clarity, navigateToClarityScreen),
                     Pair(FirstLevelOptions.FlipRotateOption, navigateToRotateScreen),
-                    Pair(FirstLevelOptions.ColorOption, navigateToColorScreen)
+                    Pair(FirstLevelOptions.ColorOption, navigateToColorScreen),
+                    Pair(FirstLevelOptions.EffectOption, navigateToEffectScreen)
                 )
             )
         }
