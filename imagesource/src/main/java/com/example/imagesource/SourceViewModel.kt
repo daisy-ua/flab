@@ -22,7 +22,7 @@ class SourceViewModel(
 
     private var sourceUri: Uri? = null
 
-    private val originalSource: Bitmap? by lazy {
+    val getOriginalSource: () -> Bitmap? = {
         sourceUri?.let { uri ->
             convertToBitmap(applicationContext, uri)
         }
@@ -32,7 +32,7 @@ class SourceViewModel(
 
     fun setupBitmap(uri: Uri) {
         sourceUri = uri
-        currentSource = originalSource?.let { src ->
+        currentSource = getOriginalSource()?.let { src ->
             getScaledDownBitmap(src, MAX_DIM_BITMAP, true)
         }
 

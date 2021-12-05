@@ -17,7 +17,9 @@ import com.example.main.components.NotifyToast
 import com.example.main.components.OptionsBottomBar
 import com.example.main.models.FirstLevelOptions
 import com.example.storage.IOProcesses
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 @Composable
 fun MainScreen(
@@ -26,7 +28,7 @@ fun MainScreen(
     navigateToClarityScreen: () -> Unit,
     navigateToRotateScreen: () -> Unit,
     navigateToColorScreen: () -> Unit,
-    navigateToEffectScreen: () -> Unit
+    navigateToEffectScreen: () -> Unit,
 ) {
     val context = LocalContext.current
     var sourceSaved by remember { mutableStateOf(false) }
@@ -40,6 +42,25 @@ fun MainScreen(
 
     val bitmap = sourceViewModel.currentSource
 
+    val onSave: () -> Unit = {
+        scope.launch {
+            try {
+                val source = withContext(Dispatchers.Default) {
+                    sourceViewModel.getOriginalSource()
+                }
+                source?.let {
+                    IOProcesses.saveMediaToStorage(
+                        context,
+                        it,
+                    )
+                }
+                sourceSaved = true
+            } catch (ex: Exception) {
+
+            }
+        }
+    }
+
     DefaultScreenUI {
         BoxWithConstraints(
             modifier = Modifier
@@ -52,19 +73,7 @@ fun MainScreen(
             Column {
 
                 MainNavTopBar(
-                    onSaveClick = {
-                        scope.launch {
-                            try {
-                                IOProcesses.saveMediaToStorage(
-                                    context,
-                                    bitmap!!,
-                                )
-                                sourceSaved = true
-                            } catch (ex: Exception) {
-
-                            }
-                        }
-                    }
+                    onSaveClick = onSave
                 )
 
                 bitmap?.asImageBitmap()?.let {
