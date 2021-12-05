@@ -41,14 +41,10 @@ fun TuneScreen(
 
     val onSourceUpdate: suspend () -> Unit = {
         onValueChange()
-        screenViewModel.updateTuneBitmap(contrastValue, brightnessValue)
-
-        val source =
-            screenViewModel.mergeSource(screenViewModel.hsvBitmap!!, screenViewModel.tuneBitmap!!)
-
-        screenViewModel.source = sourceViewModel.sharpnessValue?.let {
-            sourceViewModel.resetSource(source = source)
-        } ?: source
+        screenViewModel.source = sourceViewModel.applyTransforms(
+            contrast = screenViewModel.contrast(contrastValue),
+            brightness = screenViewModel.brightness(brightnessValue)
+        )
     }
 
     val onSave: () -> Unit = {
@@ -61,15 +57,8 @@ fun TuneScreen(
     LaunchedEffect(key1 = true) {
         screenViewModel.setup(
             processManager = sourceViewModel.processManager!!,
-            getInitialHSVBitmap = sourceViewModel::getHSVBitmap,
-            getInitialTuneBitmap = sourceViewModel::getTuneBitmap
+            sourceViewModel.applyTransforms()
         )
-
-        val source = screenViewModel.setInitialSource()
-
-        screenViewModel.source = sourceViewModel.sharpnessValue?.let {
-            sourceViewModel.resetSource(source = source)
-        } ?: source
     }
 
     SliderScreen(

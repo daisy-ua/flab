@@ -1,7 +1,7 @@
 package com.example.main
 
 import com.example.main.ui.options.tune.constants.ContrastConstants
-import com.example.main.ui.options.convertValueToPercentage
+import com.example.main.ui.options.utils.convertValueToPercentage
 import org.junit.Assert.assertEquals
 import org.junit.Test
 

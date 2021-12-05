@@ -7,10 +7,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.imagesource.utils.FlipRotateCounter
 import com.example.imagesource.utils.convertToBitmap
 import com.example.imagesource.utils.getScaledDownBitmap
 import flab.editor.library.ImageProcessManager
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 private const val MAX_DIM_BITMAP = 900
@@ -22,17 +25,22 @@ class SourceViewModel(
 
     private var sourceUri: Uri? = null
 
-    val getOriginalSource: () -> Bitmap? = {
-        sourceUri?.let { uri ->
-            convertToBitmap(applicationContext, uri)
+    var currentSource by mutableStateOf<Bitmap?>(null)
+
+    val getOriginalSource: suspend () -> Bitmap? = {
+        withContext(Dispatchers.Default) {
+            sourceUri?.let { uri ->
+                convertToBitmap(applicationContext, uri)
+            }
         }
     }
 
-    var currentSource by mutableStateOf<Bitmap?>(null)
+    var originalSource: Bitmap? = null
 
-    fun setupBitmap(uri: Uri) {
+    fun setupBitmap(uri: Uri) = viewModelScope.launch(Dispatchers.Main) {
         sourceUri = uri
-        currentSource = getOriginalSource()?.let { src ->
+        originalSource = getOriginalSource()
+        currentSource = originalSource?.let { src ->
             getScaledDownBitmap(src, MAX_DIM_BITMAP, true)
         }
 
@@ -47,40 +55,103 @@ class SourceViewModel(
     var saturationValue by mutableStateOf<Double?>(null)
     var valueValue by mutableStateOf<Double?>(null)
     var sharpnessValue by mutableStateOf<Double?>(null)
+    var flipRotateCounter: FlipRotateCounter? = null
 
-    suspend fun resetSource(
-        source: Bitmap,
+    fun resetAdjust() {
+        contrastValue = null
+        brightnessValue = null
+        hueValue = null
+        saturationValue = null
+        valueValue = null
+        sharpnessValue = null
+    }
+
+    suspend fun applyColorTransforms(
         contrast: Double? = contrastValue,
         brightness: Double? = brightnessValue,
         hue: Double? = hueValue,
         saturation: Double? = saturationValue,
         value: Double? = valueValue,
-        sharpness: Double? = sharpnessValue,
+        src: Bitmap? = null,
     ): Bitmap? {
+        var source = src ?: processManager?.originalSource
         return withContext(Dispatchers.Default) {
-            processManager?.updateSource(contrast,
-                brightness,
-                hue,
-                saturation,
-                value,
-                sharpness,
-                source = source)
+
+            contrast?.let { contrastValue ->
+                brightness?.let { brightnessValue ->
+                    source = processManager?.applyLinearTransform(
+                        contrastValue,
+                        brightnessValue,
+                        source
+                    )
+                }
+            }
+
+            hue?.let { hueValue ->
+                saturation?.let { saturationValue ->
+                    value?.let { valueValue ->
+                        source = processManager?.applyHSVTransform(
+                            hueValue,
+                            saturationValue,
+                            valueValue,
+                            source
+                        )
+                    }
+                }
+            }
+            return@withContext source
         }
     }
 
-    suspend fun getHSVBitmap() : Bitmap? {
+    suspend fun applyTransforms(
+        contrast: Double? = contrastValue,
+        brightness: Double? = brightnessValue,
+        hue: Double? = hueValue,
+        saturation: Double? = saturationValue,
+        value: Double? = valueValue,
+        src: Bitmap? = null,
+    ): Bitmap? {
+        var source = applyColorTransforms(contrast, brightness, hue, saturation, value, src)
         return withContext(Dispatchers.Default) {
-            processManager?.applyHSVTransform(
-                hueValue, saturationValue, valueValue, processManager!!.originalSource
-            )
+            sharpnessValue?.let { sharpnessValue ->
+                processManager?.updateSharpness(source)
+                source = processManager?.applySharpness(sharpnessValue, source)
+
+            }
+            return@withContext source
         }
     }
 
-    suspend fun getTuneBitmap() : Bitmap? {
+    suspend fun applyFlipRotate(source: Bitmap): Bitmap? {
         return withContext(Dispatchers.Default) {
-            processManager?.applyLinearTransform(
-                contrastValue, brightnessValue
-            )
+            processManager?.let { processManager ->
+                flipRotateCounter?.let { flipRotateCounter ->
+                    var original = source
+                    processManager.updateFlipRotate(original)
+
+                    for (direction in flipRotateCounter.rotateDirections) {
+                        if (direction.name == flipRotateCounter.direction.name) {
+                            break
+                        }
+                        original = processManager.applyRotate()
+                    }
+
+                    if (flipRotateCounter.isFlipped) {
+                        processManager.updateFlipRotate(original)
+                        original = processManager.applyFlip()
+                    }
+                    return@withContext original
+                }
+            }
         }
+    }
+
+    suspend fun getBitmapForSave(): Bitmap? {
+        var src = originalSource
+        src?.let {
+            src = applyFlipRotate(source = it)
+        }
+        src = applyTransforms(src = src)
+        return src
     }
 }

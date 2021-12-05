@@ -1,4 +1,4 @@
-package com.example.main.ui.options
+package com.example.main.ui.options.utils
 
 import com.example.main.constants.SliderConstants
 

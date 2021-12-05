@@ -2,7 +2,9 @@ package com.example.main.ui.options.effects
 
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
@@ -10,6 +12,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.imagesource.SourceViewModel
 import com.example.main.components.BitmapOptionsBottomBar
 import com.example.main.components.DefaultOptionScreen
+import kotlinx.coroutines.launch
 
 @Composable
 fun EffectScreen(
@@ -21,13 +24,24 @@ fun EffectScreen(
     val bitmap = screenViewModel.source
     val optionList = screenViewModel.photoOptions
 
+    val scope = rememberCoroutineScope()
+
     val onSave: () -> Unit = {
-        bitmap?.let {
-            sourceViewModel.currentSource = it
-            sourceViewModel.processManager?.setSource(it)
-            sourceViewModel.processManager?.setNewOriginalSource(it)
+        scope.launch {
+            try {
+                bitmap?.let {
+                    sourceViewModel.currentSource = it
+                    sourceViewModel.originalSource =
+                        screenViewModel.getBitmapForSave(sourceViewModel.originalSource!!)
+                    sourceViewModel.processManager?.setSource(it)
+                    sourceViewModel.processManager?.setNewOriginalSource(it)
+                    sourceViewModel.resetAdjust()
+                }
+                save()
+            } catch (ex: Exception) {
+
+            }
         }
-        save()
     }
 
     LaunchedEffect(key1 = true) {

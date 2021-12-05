@@ -45,9 +45,7 @@ fun MainScreen(
     val onSave: () -> Unit = {
         scope.launch {
             try {
-                val source = withContext(Dispatchers.Default) {
-                    sourceViewModel.getOriginalSource()
-                }
+                val source = sourceViewModel.getBitmapForSave()
                 source?.let {
                     IOProcesses.saveMediaToStorage(
                         context,

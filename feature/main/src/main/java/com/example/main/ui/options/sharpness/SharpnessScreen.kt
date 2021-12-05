@@ -5,8 +5,8 @@ import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.imagesource.SourceViewModel
 import com.example.main.components.SliderScreen
-import com.example.main.ui.options.convertValueToPercentage
 import com.example.main.ui.options.sharpness.constants.GaussianKernelConstants
+import com.example.main.ui.options.utils.convertValueToPercentage
 
 @Composable
 fun SharpnessScreen(
@@ -42,14 +42,17 @@ fun SharpnessScreen(
     LaunchedEffect(key1 = true) {
         screenViewModel.setup(
             processManager = sourceViewModel.processManager!!,
-            getInitialHSVBitmap = sourceViewModel::getHSVBitmap,
-            getInitialTuneBitmap = sourceViewModel::getTuneBitmap
+            source = null
         )
+        val source = sourceViewModel.applyColorTransforms()
 
-        val source = screenViewModel.setInitialSource()
+        screenViewModel.processManager.updateSharpness(source)
 
         screenViewModel.source = if (sharpeningValue.value != 0f) {
-            sourceViewModel.resetSource(source = source)
+            sourceViewModel.processManager?.applySharpness(
+                sourceViewModel.sharpnessValue,
+                source = source!!
+            )
         } else source
     }
 

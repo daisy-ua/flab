@@ -5,6 +5,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.imagesource.SourceViewModel
+import com.example.imagesource.data.AdjustFilters
 import com.example.main.components.OptionsBottomBar
 import com.example.main.components.SliderScreen
 import com.example.main.models.ColorScreenOptions
@@ -45,13 +46,11 @@ fun ColorScreen(
 
     val onSourceUpdate: suspend () -> Unit = {
         onValueChange()
-        screenViewModel.updateHSVBitmap(hueValue, saturationValue, brightnessValue)
-
-        val source =
-            screenViewModel.mergeSource(screenViewModel.tuneBitmap!!, screenViewModel.hsvBitmap!!)
-        screenViewModel.source = sourceViewModel.sharpnessValue?.let {
-            sourceViewModel.resetSource(source = source)
-        } ?: source
+        screenViewModel.source = sourceViewModel.applyTransforms(
+            hue = screenViewModel.hue(hueValue),
+            saturation = screenViewModel.saturation(saturationValue),
+            value = screenViewModel.value(brightnessValue)
+        )
     }
 
     val onSave: () -> Unit = {
@@ -65,15 +64,8 @@ fun ColorScreen(
     LaunchedEffect(key1 = true) {
         screenViewModel.setup(
             processManager = sourceViewModel.processManager!!,
-            getInitialHSVBitmap = sourceViewModel::getHSVBitmap,
-            getInitialTuneBitmap = sourceViewModel::getTuneBitmap
+            sourceViewModel.applyTransforms()
         )
-
-        val source = screenViewModel.setInitialSource()
-
-        screenViewModel.source = sourceViewModel.sharpnessValue?.let {
-            sourceViewModel.resetSource(source = source)
-        } ?: source
     }
 
     SliderScreen(

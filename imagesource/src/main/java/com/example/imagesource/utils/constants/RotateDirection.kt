@@ -1,4 +1,4 @@
-package com.example.main.ui.options.rotate.constants
+package com.example.imagesource.utils.constants
 
 
 enum class Directions {

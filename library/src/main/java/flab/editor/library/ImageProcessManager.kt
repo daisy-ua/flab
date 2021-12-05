@@ -5,13 +5,11 @@ import com.example.constants.FlipAlignment
 import com.example.constants.RotateAlignment
 import flab.editor.library.adjust.*
 
-class ImageProcessManager(private val bitmap: Bitmap) {
-    //TODO:convert all to  : Mat
-    var tune: Tune = Tune(bitmap)
-    var sharpness: Sharpness = Sharpness(bitmap)
-    var hsvTransform: HSVTransform = HSVTransform(bitmap)
-    val blend: Blend by lazy { Blend(bitmap) }
-    var flipRotate = FlipRotate(bitmap)
+class ImageProcessManager(bitmap: Bitmap) {
+    private var tune: Tune = Tune(bitmap)
+    private var sharpness: Sharpness = Sharpness(bitmap)
+    private var hsvTransform: HSVTransform = HSVTransform(bitmap)
+    private var flipRotate = FlipRotate(bitmap)
 
     var originalSource: Bitmap = bitmap
         private set
@@ -20,24 +18,10 @@ class ImageProcessManager(private val bitmap: Bitmap) {
         originalSource = bitmap
     }
 
-    fun updateSource(
-        contrast: Double?,
-        brightness: Double?,
-        hue: Double?,
-        saturation: Double?,
-        value: Double?,
-        sharpnessValue: Double?,
-        source: Bitmap? = null,
-    ): Bitmap {
-
-        sharpness.updateSource(source!!)
-
-        var draft = applySharpness(sharpnessValue)
-
-        return draft ?: bitmap
-    }
-
-    fun applySharpness(sharpnessValue: Double?) : Bitmap? {
+    fun applySharpness(sharpnessValue: Double?, source: Bitmap? = null) : Bitmap? {
+        source?.let {
+            sharpness = Sharpness(source)
+        }
         return sharpnessValue?.let { _sharpness ->
             if (_sharpness > 0)
                 sharpness.sharpen(_sharpness)
@@ -60,6 +44,7 @@ class ImageProcessManager(private val bitmap: Bitmap) {
         value: Double?,
         source: Bitmap? = null,
     ): Bitmap? {
+        source?.let { hsvTransform = HSVTransform(source) }
         return if (hue == null || saturation == null || value == null) null
         else hsvTransform.setHSVTransform(hue, saturation, value)
     }
@@ -77,11 +62,5 @@ class ImageProcessManager(private val bitmap: Bitmap) {
 
     fun updateTune(bitmap: Bitmap) = tune.updateSource(bitmap)
     fun updateFlipRotate(bitmap: Bitmap) = flipRotate.updateSource(bitmap)
-
-    fun applySourceMerge(
-        src1: Bitmap,
-        src2: Bitmap,
-        opacity: Double = 0.5,
-    ) = blend.blend(src1, src2)
-
+    fun updateSharpness(bitmap: Bitmap?) = bitmap?.let { sharpness.updateSource(it) }
 }

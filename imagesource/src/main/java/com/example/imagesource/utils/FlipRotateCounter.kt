@@ -1,4 +1,6 @@
-package com.example.main.ui.options.rotate.constants
+package com.example.imagesource.utils
+
+import com.example.imagesource.utils.constants.Directions
 
 class FlipRotateCounter {
     val rotateDirections = listOf(

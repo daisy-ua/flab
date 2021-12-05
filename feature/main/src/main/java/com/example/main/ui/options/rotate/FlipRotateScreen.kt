@@ -36,9 +36,12 @@ fun FlipRotateScreen(
         bitmapImage = bitmap?.asImageBitmap(),
         onSave = {
             scope.launch(Dispatchers.Main) {
-                val original = screenViewModel.updateOriginal()
-                sourceViewModel.processManager?.setSource(original)
-                sourceViewModel.processManager?.setNewOriginalSource(original)
+                sourceViewModel.flipRotateCounter = screenViewModel.flipRotateCounter
+                sourceViewModel.applyFlipRotate(screenViewModel.originalSource)?.also { original ->
+                    sourceViewModel.processManager?.setSource(original)
+                    sourceViewModel.processManager?.setNewOriginalSource(original)
+                }
+
                 sourceViewModel.currentSource = bitmap
                 save()
             }
