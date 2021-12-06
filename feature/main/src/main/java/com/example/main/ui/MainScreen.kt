@@ -29,6 +29,7 @@ fun MainScreen(
     navigateToRotateScreen: () -> Unit,
     navigateToColorScreen: () -> Unit,
     navigateToEffectScreen: () -> Unit,
+    navigateBack: () -> Unit
 ) {
     val context = LocalContext.current
     var sourceSaved by remember { mutableStateOf(false) }
@@ -71,6 +72,7 @@ fun MainScreen(
             Column {
 
                 MainNavTopBar(
+                    onOpenClick = navigateBack,
                     onSaveClick = onSave
                 )
 

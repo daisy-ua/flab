@@ -39,9 +39,11 @@ class SourceViewModel(
 
     fun setupBitmap(uri: Uri) = viewModelScope.launch(Dispatchers.Main) {
         sourceUri = uri
-        originalSource = getOriginalSource()
-        currentSource = originalSource?.let { src ->
-            getScaledDownBitmap(src, MAX_DIM_BITMAP, true)
+        currentSource = withContext(Dispatchers.Default) {
+            originalSource = getOriginalSource()
+            originalSource?.let { src ->
+                getScaledDownBitmap(src, MAX_DIM_BITMAP, true)
+            }
         }
 
         currentSource?.let { src ->

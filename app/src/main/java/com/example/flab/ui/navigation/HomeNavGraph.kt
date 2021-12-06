@@ -35,7 +35,8 @@ private fun CreateMainScreen(navController: NavHostController, vm: SourceViewMod
         navigateToClarityScreen = { navController.navigate(Screen.ClarityEdit.route) },
         navigateToRotateScreen = { navController.navigate(Screen.FlipRotateEdit.route) },
         navigateToColorScreen = { navController.navigate(Screen.ColorEdit.route) },
-        navigateToEffectScreen = { navController.navigate(Screen.EffectEdit.route) }
+        navigateToEffectScreen = { navController.navigate(Screen.EffectEdit.route) },
+        navigateBack = { navController.popBackStack() }
     )
 
 @Composable
@@ -52,6 +53,5 @@ private fun CreateHomeScreen(navController: NavHostController, vm: SourceViewMod
 
 private fun navigateToMainScreen(navController: NavHostController) =
     navController.navigate(Screen.Main.route) {
-        popUpTo(Screen.Home.route) { inclusive = true }
         launchSingleTop = true
     }
