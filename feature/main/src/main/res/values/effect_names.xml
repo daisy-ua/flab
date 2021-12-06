@@ -6,4 +6,5 @@
     <string name="otsu_effect">Otsu</string>
     <string name="sepia_effect">Sepia</string>
     <string name="colored_effect">Color</string>
+    <string name="winter_effect">Winter</string>
 </resources>

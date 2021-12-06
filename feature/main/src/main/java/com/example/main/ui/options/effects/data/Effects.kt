@@ -18,4 +18,6 @@ sealed class Effects(
     object Sepia : Effects(nameId = R.string.sepia_effect)
 
     object Colored : Effects(nameId = R.string.colored_effect)
+
+    object Winter: Effects(nameId = R.string.winter_effect)
 }

@@ -38,21 +38,18 @@ class HSVTransform(
     private fun setHue(value: Double): Mat {
         val newH = Mat()
         Core.add(h, Scalar(value), newH)
-        Core.normalize(newH, newH, 0.0, 179.0, Core.NORM_MINMAX)
         return newH
     }
 
     private fun setSaturation(value: Double): Mat {
         val newS = Mat()
         Core.add(s, Scalar(value), newS)
-        Core.normalize(newS, newS, 0.0, 255.0, Core.NORM_MINMAX)
         return newS
     }
 
     private fun setBrightness(value: Double): Mat {
         val newV = Mat()
         Core.add(v, Scalar(value), newV)
-        Core.normalize(newV, newV, 0.0, 255.0, Core.NORM_MINMAX)
         return newV
     }
 

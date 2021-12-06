@@ -47,16 +47,21 @@ class Filters(
 
     fun applyColored() = applyKernelTransform(KernelMats.COLORED_MAT)
 
-    private fun applyKernelTransform(kernel: Mat): Bitmap {
+    fun applyWinter() = applyKernelTransform(KernelMats.COLORED_MAT, false)
+
+    private fun applyKernelTransform(kernel: Mat, normalize: Boolean = true): Bitmap {
         val dst = Mat()
         Core.transform(src, dst, kernel)
         result = Bitmap.createBitmap(src.cols(), src.rows(), Bitmap.Config.ARGB_8888)
-        return saveNormalizedBGR(dst)
+        return saveNormalizedBGR(dst, normalize)
     }
 
-    private fun saveNormalizedBGR(source: Mat): Bitmap {
-        normalizeBGR(source)
-        val dst = mergeBGRChannels()
+    private fun saveNormalizedBGR(source: Mat, normalize: Boolean = true): Bitmap {
+        var dst = source
+        if (normalize) {
+            normalizeBGR(source)
+            dst = mergeBGRChannels()
+        }
         saveResult(dst)
         return result
     }

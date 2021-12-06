@@ -88,6 +88,9 @@ class EffectViewModel : ViewModel(), IProcessManager {
                         Effects.Colored.nameId ->
                             Pair(filter.applyColored(), { setFilter(effect.nameId) })
 
+                        Effects.Winter.nameId ->
+                            Pair(filter.applyWinter(), { setFilter(effect.nameId) })
+
                         else -> Pair(bitmap, { source = mode.getSource() })
                     }
 
@@ -117,6 +120,7 @@ class EffectViewModel : ViewModel(), IProcessManager {
     private fun getDefaultEffectList() = listOf(
         Effects.Original,
         Effects.Sepia,
+        Effects.Winter,
         Effects.Colored,
         Effects.Binary,
         Effects.Otsu,
@@ -134,6 +138,8 @@ class EffectViewModel : ViewModel(), IProcessManager {
             Effects.Otsu.nameId -> mode::applyOtsu
 
             Effects.Colored.nameId -> mode::applyColored
+
+            Effects.Winter.nameId -> mode::applyWinter
 
             else -> mode::getSource
         }
