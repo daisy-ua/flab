@@ -37,6 +37,7 @@ fun FlipRotateScreen(
         onSave = {
             scope.launch(Dispatchers.Main) {
                 sourceViewModel.flipRotateCounter = screenViewModel.flipRotateCounter
+                sourceViewModel.originalSource = sourceViewModel.applyFlipRotate(sourceViewModel.originalSource!!)
                 sourceViewModel.applyFlipRotate(screenViewModel.originalSource)?.also { original ->
                     sourceViewModel.processManager?.setSource(original)
                     sourceViewModel.processManager?.setNewOriginalSource(original)
