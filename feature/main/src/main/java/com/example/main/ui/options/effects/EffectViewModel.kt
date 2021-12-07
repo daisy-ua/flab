@@ -22,7 +22,8 @@ class EffectViewModel : ViewModel(), IProcessManager {
     private lateinit var mode: Filters
 
     private var cache: Cache? = null
-    private var appliedEffect: Effects? = null
+    var appliedEffect: Effects? = Effects.Original
+        private set
 
     val photoOptions = mutableListOf<Pair<Effects, () -> Any>>()
 

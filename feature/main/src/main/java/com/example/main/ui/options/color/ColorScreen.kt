@@ -43,6 +43,7 @@ fun ColorScreen(
 
     val sliderValue = remember { mutableStateOf<Float?>(null) }
     var onValueChange by remember { mutableStateOf({ }) }
+    var currentSelected by remember { mutableStateOf<Int?>(null) }
 
     val onSourceUpdate: suspend () -> Unit = {
         onValueChange()
@@ -79,23 +80,27 @@ fun ColorScreen(
             photoOptions = listOf(
                 Pair(ColorScreenOptions.HueOption, {
                     sliderValue.value = hueValue
+                    currentSelected = ColorScreenOptions.HueOption.nameId
                     onValueChange = {
                         hueValue = sliderValue.value!!
                     }
                 }),
                 Pair(ColorScreenOptions.SaturationOption, {
+                    currentSelected = ColorScreenOptions.SaturationOption.nameId
                     sliderValue.value = saturationValue
                     onValueChange = {
                         saturationValue = sliderValue.value!!
                     }
                 }),
                 Pair(ColorScreenOptions.ValueOption, {
+                    currentSelected = ColorScreenOptions.ValueOption.nameId
                     sliderValue.value = brightnessValue
                     onValueChange = {
                         brightnessValue = sliderValue.value!!
                     }
                 })
-            )
+            ),
+            currentSelectedId = currentSelected
         )
     }
 }

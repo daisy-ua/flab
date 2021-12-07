@@ -20,6 +20,7 @@ import com.example.main.ui.options.effects.data.Effects
 fun OptionsBottomBar(
     modifier: Modifier = Modifier,
     photoOptions: List<Pair<IPhotoOption, () -> Unit>>,
+    currentSelectedId: Int? = null,
     contentAlignment: Alignment = Alignment.BottomCenter,
 ) {
     BoxWithConstraints(
@@ -37,6 +38,7 @@ fun OptionsBottomBar(
                         .aspectRatio(1f),
                     painter = painterResource(id = option.first.drawableId),
                     title = stringResource(option.first.nameId),
+                    isSelected = currentSelectedId == option.first.nameId,
                     onClick = option.second
                 )
             }
@@ -49,6 +51,7 @@ fun OptionsBottomBar(
 fun BitmapOptionsBottomBar(
     modifier: Modifier = Modifier,
     photoOptions: List<Pair<Effects, () -> Any>>,
+    currentSelectedId: Int? = null,
     contentAlignment: Alignment = Alignment.BottomCenter,
 ) {
     BoxWithConstraints(
@@ -65,6 +68,7 @@ fun BitmapOptionsBottomBar(
                         .width(thumbnailSize)
                         .aspectRatio(1f),
                     imageBitmap = option.first.thumbnail?.asImageBitmap(),
+                    isSelected = currentSelectedId == option.first.nameId,
                     title = stringResource(id = option.first.nameId),
                     onClick = { option.second.invoke() }
                 )

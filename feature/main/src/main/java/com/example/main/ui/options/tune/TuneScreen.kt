@@ -38,6 +38,7 @@ fun TuneScreen(
 
     val sliderValue = remember { mutableStateOf<Float?>(null) }
     var onValueChange by remember { mutableStateOf({ }) }
+    var currentSelectedModeId by remember { mutableStateOf<Int?>(null) }
 
     val onSourceUpdate: suspend () -> Unit = {
         onValueChange()
@@ -71,18 +72,21 @@ fun TuneScreen(
             modifier = modifier.fillMaxWidth(),
             photoOptions = listOf(
                 Pair(TuneScreenOptions.Contrast, {
+                    currentSelectedModeId = TuneScreenOptions.Contrast.nameId
                     sliderValue.value = contrastValue
                     onValueChange = {
                         contrastValue = sliderValue.value!!
                     }
                 }),
                 Pair(TuneScreenOptions.Brightness, {
+                    currentSelectedModeId = TuneScreenOptions.Brightness.nameId
                     sliderValue.value = brightnessValue
                     onValueChange = {
                         brightnessValue = sliderValue.value!!
                     }
                 })
-            )
+            ),
+            currentSelectedId = currentSelectedModeId
         )
     }
 }

@@ -58,7 +58,8 @@ fun EffectScreen(
     ) {
         BitmapOptionsBottomBar(
             modifier = modifier.fillMaxWidth(),
-            photoOptions = optionList
+            photoOptions = optionList,
+            currentSelectedId = screenViewModel.appliedEffect?.nameId
         )
     }
 }
