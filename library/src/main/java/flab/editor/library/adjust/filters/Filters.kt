@@ -7,7 +7,7 @@ import org.opencv.core.Mat
 import org.opencv.imgproc.Imgproc
 
 class Filters(
-    bitmap: Bitmap
+    bitmap: Bitmap,
 ) : ImageProcessing(bitmap) {
     private val bgraChannels: List<Mat> = mutableListOf()
 
@@ -23,7 +23,7 @@ class Filters(
         return result
     }
 
-    fun applyBinary() : Bitmap {
+    fun applyBinary(): Bitmap {
         val dst = Mat()
         Imgproc.cvtColor(src, dst, Imgproc.COLOR_BGR2GRAY)
         Imgproc.threshold(dst, dst, 127.0, 255.0, Imgproc.THRESH_BINARY)
@@ -33,7 +33,7 @@ class Filters(
         return result
     }
 
-    fun applyOtsu() : Bitmap {
+    fun applyOtsu(): Bitmap {
         val dst = Mat()
         Imgproc.cvtColor(src, dst, Imgproc.COLOR_BGR2GRAY)
         Imgproc.threshold(dst, dst, 127.0, 255.0, Imgproc.THRESH_OTSU)
@@ -57,11 +57,8 @@ class Filters(
     }
 
     private fun saveNormalizedBGR(source: Mat, normalize: Boolean = true): Bitmap {
-        var dst = source
-        if (normalize) {
-            normalizeBGR(source)
-            dst = mergeBGRChannels()
-        }
+        normalizeBGR(source)
+        val dst = mergeBGRChannels()
         saveResult(dst)
         return result
     }

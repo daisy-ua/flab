@@ -121,7 +121,7 @@ class EffectViewModel : ViewModel(), IProcessManager {
     private fun getDefaultEffectList() = listOf(
         Effects.Original,
         Effects.Sepia,
-        Effects.Winter,
+//        Effects.Winter,
         Effects.Colored,
         Effects.Binary,
         Effects.Otsu,

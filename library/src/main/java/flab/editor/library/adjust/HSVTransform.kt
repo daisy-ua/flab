@@ -50,6 +50,7 @@ class HSVTransform(
     private fun setBrightness(value: Double): Mat {
         val newV = Mat()
         Core.add(v, Scalar(value), newV)
+        Core.normalize(newV, newV, 0.0, 255.0, Core.NORM_MINMAX)
         return newV
     }
 
