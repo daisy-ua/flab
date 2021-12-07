@@ -27,7 +27,7 @@ class Sharpness(
 
     fun sharpen(kernelSize: Double) : Bitmap {
         gaussianBlur(kernelSize)
-        Core.addWeighted(src, 1.5, dst, -0.5,0.0, dst)
+        Core.addWeighted(src, 2.0, dst, -1.0,0.0, dst)
         saveResult(dst)
         return result
     }
