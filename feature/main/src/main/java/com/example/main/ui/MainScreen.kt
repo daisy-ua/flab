@@ -17,9 +17,7 @@ import com.example.main.components.NotifyToast
 import com.example.main.components.OptionsBottomBar
 import com.example.main.models.FirstLevelOptions
 import com.example.storage.IOProcesses
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 @Composable
 fun MainScreen(
@@ -29,7 +27,7 @@ fun MainScreen(
     navigateToRotateScreen: () -> Unit,
     navigateToColorScreen: () -> Unit,
     navigateToEffectScreen: () -> Unit,
-    navigateBack: () -> Unit
+    navigateBack: () -> Unit,
 ) {
     val context = LocalContext.current
     var sourceSaved by remember { mutableStateOf(false) }
@@ -72,7 +70,10 @@ fun MainScreen(
             Column {
 
                 MainNavTopBar(
-                    onOpenClick = navigateBack,
+                    onOpenClick = {
+                        sourceViewModel.resetAdjust()
+                        navigateBack()
+                    },
                     onSaveClick = onSave
                 )
 
