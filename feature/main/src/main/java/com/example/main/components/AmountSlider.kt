@@ -20,21 +20,32 @@ fun AmountSlider(
     modifier: Modifier = Modifier,
     sliderName: Int = R.string.amount,
     sliderValue: Float,
-    valueRange:  ClosedFloatingPointRange<Float> = SliderRange.MIN_SLIDER..SliderRange.MAX_SLIDER,
+    valueRange: ClosedFloatingPointRange<Float> = SliderRange.MIN_SLIDER..SliderRange.MAX_SLIDER,
     onValueChange: (Float) -> Unit = { },
-    onValueChangeFinished: () -> Unit = { }
+    onValueChangeFinished: () -> Unit = { },
 ) {
-    Row(modifier.fillMaxWidth().padding(16.dp, 8.dp),
+    Row(modifier
+        .fillMaxWidth()
+        .padding(16.dp, 8.dp),
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Text(text = stringResource(id = sliderName))
+        Text(
+            modifier = modifier.weight(1.5f),
+            text = stringResource(id = sliderName)
+        )
 
         Slider(
+            modifier = modifier.weight(6f),
             value = sliderValue,
             onValueChange = onValueChange,
             valueRange = valueRange,
             onValueChangeFinished = onValueChangeFinished
+        )
+        Text(
+            modifier = modifier
+                .weight(1f, true),
+            text = sliderValue.toInt().toString()
         )
     }
 }
