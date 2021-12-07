@@ -150,9 +150,6 @@ class SourceViewModel(
 
     suspend fun getBitmapForSave(): Bitmap? {
         var src = originalSource
-        src?.let {
-            src = applyFlipRotate(source = it)
-        }
         src = applyTransforms(src = src)
         return src
     }

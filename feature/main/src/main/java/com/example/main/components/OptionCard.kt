@@ -28,7 +28,7 @@ fun OptionCard(
     isSelected: Boolean = false,
     onClick: () -> Unit = { },
 ) {
-    val color = if (isSelected) colorResource(id = R.color.seance) else Color.Gray
+    val color = if (isSelected) Color(0xFF6200EE) else Color.Gray
 
     Box(
         modifier = modifier.clickable { onClick() }
