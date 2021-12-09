@@ -120,13 +120,32 @@ class EffectViewModel : ViewModel(), IProcessManager {
     private suspend fun getThumbnailSource(): Bitmap? {
         return withContext(Dispatchers.Default) {
             source?.let {
+                val bitmap = getSquareBitmap(it)
+
                 Bitmap.createScaledBitmap(
-                    it,
-                    100,
-                    it.height * 100 / it.width,
-                    false
+                    bitmap, 150, 150, false
                 )
             }
+        }
+    }
+
+    private fun getSquareBitmap(bitmap: Bitmap) : Bitmap {
+        return if (bitmap.width >= bitmap.height) {
+            Bitmap.createBitmap(
+                bitmap,
+                bitmap.width / 2 - bitmap.height / 2,
+                0,
+                bitmap.height,
+                bitmap.height
+            )
+        } else {
+            Bitmap.createBitmap(
+                bitmap,
+                0,
+                bitmap.height / 2 - bitmap.width / 2,
+                bitmap.width,
+                bitmap.width
+            )
         }
     }
 
