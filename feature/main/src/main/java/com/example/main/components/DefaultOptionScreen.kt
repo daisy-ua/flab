@@ -24,7 +24,7 @@ fun DefaultOptionScreen(
                 .fillMaxSize()
         ) {
             val itemWidth = maxWidth
-            val itemHeight = maxHeight - 150.dp
+            val itemHeight = maxHeight - 180.dp
 
             Column {
 
@@ -54,7 +54,8 @@ fun DefaultOptionScreen(
 
             Box(modifier = modifier
                 .fillMaxWidth()
-                .align(Alignment.BottomCenter)) {
+                .align(Alignment.BottomCenter)
+            ) {
                 bottomSheet()
             }
 

@@ -20,4 +20,12 @@ sealed class Effects(
     object Colored : Effects(nameId = R.string.colored_effect)
 
     object Winter: Effects(nameId = R.string.winter_effect)
+
+    object Pink: Effects(nameId = R.string.sweet_effect)
+
+    object Cyan: Effects(nameId = R.string.laguna_effect)
+
+    object Graphite: Effects(nameId = R.string.graphite_effect)
+
+    object Old: Effects(nameId = R.string.old_effect)
 }

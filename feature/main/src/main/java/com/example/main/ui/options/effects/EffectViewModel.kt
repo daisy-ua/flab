@@ -92,6 +92,18 @@ class EffectViewModel : ViewModel(), IProcessManager {
                         Effects.Winter.nameId ->
                             Pair(filter.applyWinter(), { setFilter(effect.nameId) })
 
+                        Effects.Pink.nameId ->
+                            Pair(filter.applyPink(), { setFilter(effect.nameId) })
+
+                        Effects.Cyan.nameId ->
+                            Pair(filter.applyCyan(), { setFilter(effect.nameId) })
+
+                        Effects.Graphite.nameId ->
+                            Pair(filter.applyGraphite(), { setFilter(effect.nameId) })
+
+                        Effects.Old.nameId ->
+                            Pair(filter.applyOld(), { setFilter(effect.nameId) })
+
                         else -> Pair(bitmap, { source = mode.getSource() })
                     }
 
@@ -121,8 +133,12 @@ class EffectViewModel : ViewModel(), IProcessManager {
     private fun getDefaultEffectList() = listOf(
         Effects.Original,
         Effects.Sepia,
-//        Effects.Winter,
+        Effects.Winter,
+        Effects.Pink,
+        Effects.Cyan,
         Effects.Colored,
+        Effects.Graphite,
+        Effects.Old,
         Effects.Binary,
         Effects.Otsu,
         Effects.GrayScale,
@@ -141,6 +157,14 @@ class EffectViewModel : ViewModel(), IProcessManager {
             Effects.Colored.nameId -> mode::applyColored
 
             Effects.Winter.nameId -> mode::applyWinter
+
+            Effects.Cyan.nameId -> mode::applyCyan
+
+            Effects.Pink.nameId -> mode::applyPink
+
+            Effects.Graphite.nameId -> mode::applyGraphite
+
+            Effects.Old.nameId -> mode::applyOld
 
             else -> mode::getSource
         }

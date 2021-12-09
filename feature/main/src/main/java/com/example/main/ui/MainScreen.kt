@@ -72,6 +72,7 @@ fun MainScreen(
                 MainNavTopBar(
                     onOpenClick = {
                         sourceViewModel.resetAdjust()
+                        sourceViewModel.currentSource = null
                         navigateBack()
                     },
                     onSaveClick = onSave

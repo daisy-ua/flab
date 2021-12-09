@@ -6,7 +6,7 @@ object ValueConstants : SliderConstants {
     override val min: Float
         get() = -100f
     override val max: Float
-        get() = 200f
+        get() = 100f
     override val mean: Float
         get() = 0f
 }

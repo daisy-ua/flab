@@ -5,6 +5,10 @@
     <string name="binary_effect">Binary</string>
     <string name="otsu_effect">Otsu</string>
     <string name="sepia_effect">Sepia</string>
-    <string name="colored_effect">Color</string>
+    <string name="colored_effect">Toxic</string>
     <string name="winter_effect">Winter</string>
+    <string name="laguna_effect">Laguna</string>
+    <string name="sweet_effect">Sweet</string>
+    <string name="graphite_effect">Graphite</string>
+    <string name="old_effect">Old</string>
 </resources>
