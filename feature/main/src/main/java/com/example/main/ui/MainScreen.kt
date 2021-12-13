@@ -89,18 +89,20 @@ fun MainScreen(
                 }
             }
 
-            OptionsBottomBar(
-                modifier = Modifier
-                    .align(Alignment.BottomStart)
-                    .fillMaxWidth(),
-                photoOptions = listOf(
-                    Pair(FirstLevelOptions.TuneOption, navigateToTuneScreen),
-                    Pair(FirstLevelOptions.Clarity, navigateToClarityScreen),
-                    Pair(FirstLevelOptions.FlipRotateOption, navigateToRotateScreen),
-                    Pair(FirstLevelOptions.ColorOption, navigateToColorScreen),
-                    Pair(FirstLevelOptions.EffectOption, navigateToEffectScreen)
+            bitmap?.let {
+                OptionsBottomBar(
+                    modifier = Modifier
+                        .align(Alignment.BottomStart)
+                        .fillMaxWidth(),
+                    photoOptions = listOf(
+                        Pair(FirstLevelOptions.TuneOption, navigateToTuneScreen),
+                        Pair(FirstLevelOptions.Clarity, navigateToClarityScreen),
+                        Pair(FirstLevelOptions.FlipRotateOption, navigateToRotateScreen),
+                        Pair(FirstLevelOptions.ColorOption, navigateToColorScreen),
+                        Pair(FirstLevelOptions.EffectOption, navigateToEffectScreen)
+                    )
                 )
-            )
+            }
         }
     }
 

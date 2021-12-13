@@ -16,7 +16,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-private const val MAX_DIM_BITMAP = 900
+private const val MAX_DIM_BITMAP = 850
 
 class SourceViewModel(
     applicationContext: Application,

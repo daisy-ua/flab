@@ -30,6 +30,6 @@ class FlipRotateCounter {
     }
 
     private fun resetRotateCount() {
-        if (rotateCount >= rotateDirections.size) rotateCount = 0
+        if (rotateCount >= rotateDirections.size) rotateCount %= rotateDirections.size
     }
 }
